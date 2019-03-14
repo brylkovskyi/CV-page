@@ -7,14 +7,14 @@ const routes: Routes = [
     path: 'user',
     loadChildren: './user/user.module#UserModule'
   },
-  {
-    path: 'admin',
-    loadChildren: './user/admin.module#AdminModule'
-  },
-  {
-    path: 'login',
-    loadChildren: './user/login.module#LoginModule'
-  },
+  // {
+  //   path: 'admin',
+  //   loadChildren: './user/admin.module#AdminModule'
+  // },
+  // {
+  //   path: 'login',
+  //   loadChildren: './user/login.module#LoginModule'
+  // },
   {
     path: '',
     pathMatch: 'full',
