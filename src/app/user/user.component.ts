@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {UserService} from './user.service';
 
 @Component({
@@ -10,7 +10,7 @@ export class UserComponent implements OnInit {
   userData;
   firstLoad;
 
-  constructor(private parser: UserService) {
+  constructor(private parser: UserService, private changeDetector: ChangeDetectorRef) {
   }
 
   loadWatcher() {
@@ -19,6 +19,7 @@ export class UserComponent implements OnInit {
 
   scrollTo(name) {
     this.firstLoad = false;
+    this.changeDetector.detectChanges();
     document.getElementById(name).scrollIntoView({behavior: 'smooth', block: 'start'});
   }
 
