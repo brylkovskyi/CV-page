@@ -148,9 +148,9 @@ export const UserData = {
                             <span><i>Technologies: </i>HTML, CSS, JS, Jenkins, Basecamp, WebStorm, Photoshop, Illustrator, SVN, MJML Framework</span>
                         </div>
                     </div>
-                    <ul style="position: absolute; left: 31%; top: 8px; border-left: 2px solid #b0b0b0; padding-left: 13px; font-size: 13px">
-                        <li style="margin-top: -8px"></li>
-                        <li style="margin-bottom: -8px; margin-top: 95px"></li>
+                    <ul style="position: absolute; left: 31%; top: 9px; border-left: 2px solid #b0b0b0; padding-left: 13px; font-size: 13px; list-style-type: none">
+                        <li style="margin: -16px 0 0 -28px; font-size: 24px; text-align: center">•</li>
+                        <li style="margin: 78px 0 -12px -28px; font-size: 24px; text-align: center">•</li>
                     </ul>               
                 </div>
 `
@@ -177,9 +177,9 @@ export const UserData = {
                             <span>Web UI Development</span>
                         </div>
                     </div>
-                    <ul style="position: absolute; left: 31%; top: 8px; border-left: 2px solid #b0b0b0; padding-left: 13px; font-size: 13px">
-                        <li style="margin-top: -8px"></li>
-                        <li style="margin-bottom: -8px; margin-top: 58px"></li>
+                    <ul style="position: absolute; left: 31%; top: 9px; border-left: 2px solid #b0b0b0; padding-left: 13px; font-size: 13px; list-style-type: none">
+                        <li style="margin: -16px 0 0 -28px; font-size: 24px; text-align: center">•</li>
+                        <li style="margin: 42px 0 -12px -28px; font-size: 24px; text-align: center">•</li>
                     </ul>               
                 </div>
 `
