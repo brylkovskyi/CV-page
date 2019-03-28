@@ -8,15 +8,23 @@ import {InfoWelcomeComponent} from './info-welcome/info-welcome.component';
 import {UserRoutingModule} from './user-routing.module';
 import {UserService} from './user.service';
 import {NgScrollbarModule} from 'ngx-scrollbar';
+import {AngularFireModule} from '@angular/fire';
+import {environment} from '../../environments/environment';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AuthService} from '../auth.service';
 
 @NgModule({
   declarations: [UserComponent, AsideTableComponent, InfoAboutComponent, InfoWelcomeComponent],
-  providers: [UserService],
+  providers: [UserService, AuthService],
   imports: [
     NgScrollbarModule,
     CommonModule,
     SharedModule,
-    UserRoutingModule
+    UserRoutingModule,
+    AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule
   ]
 })
 export class UserModule {

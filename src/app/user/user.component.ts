@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {UserService} from './user.service';
+import {AuthService} from '../auth.service';
 
 @Component({
   selector: 'app-user',
@@ -9,8 +10,12 @@ import {UserService} from './user.service';
 export class UserComponent implements OnInit {
   userData;
   firstLoad;
+  authStatus = false;
 
-  constructor(private parser: UserService, private changeDetector: ChangeDetectorRef) {
+  constructor(
+    private dataService: UserService,
+    private changeDetector: ChangeDetectorRef,
+    private authService: AuthService) {
   }
 
   loadWatcher() {
@@ -42,8 +47,23 @@ export class UserComponent implements OnInit {
 
 
   ngOnInit() {
+    this.authService.authStatusChecker();
+    this.authService.authStatus.subscribe(userId => {
+        if (userId) {
+          this.authStatus = true;
+          this.dataService.getUsersList().subscribe(list => {
+            Object.keys(list.payload.data()).forEach(key => {
+              if (key === userId) {
+                this.dataService.getUserdata(list.payload.data()[key]).subscribe(
+                  data => this.userData = data.payload.data()
+                );
+              }
+            });
+          });
+        }
+      }
+    );
     this.firstLoad = true;
-    this.userData = this.parser.getEntity();
   }
 
 }

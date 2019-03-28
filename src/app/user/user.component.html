@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="userData" class="container">
     <div class="main">
         <aside class="aside">
             <app-photo class="photo" [photo]="userData.photoURL"></app-photo>
@@ -15,7 +15,7 @@
         </aside>
         <section>
             <header class="title">
-                <h1 (click)="firstLoad=true" [ngClass]="{'no-welcome': !firstLoad}">{{userData.name}}</h1>
+                <h1 (click)="firstLoad=true;" [ngClass]="{'no-welcome': !firstLoad}">{{userData.name}}</h1>
                 <h2>{{userData.profession}}</h2>
             </header>
             <section class="info" [ngClass]="{'about':!firstLoad}">
