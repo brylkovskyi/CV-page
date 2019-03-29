@@ -10,7 +10,7 @@ import {AuthService} from '../auth.service';
 export class UserComponent implements OnInit {
   userData;
   firstLoad;
-  authStatus = false;
+  authStatus;
 
   constructor(
     private dataService: UserService,
@@ -47,23 +47,34 @@ export class UserComponent implements OnInit {
 
 
   ngOnInit() {
+    this.authService.loading = 'Checking Authorization';
     this.authService.authStatusChecker();
-    this.authService.authStatus.subscribe(userId => {
-        if (userId) {
-          this.authStatus = true;
+    this.authService.authStatus.subscribe(user => {
+        this.authStatus = user;
+        if (!user) {
+          this.userData = null;
+        }
+        if (user) {
+          this.authService.loading = 'Loading User Data';
           this.dataService.getUsersList().subscribe(list => {
             Object.keys(list.payload.data()).forEach(key => {
-              if (key === userId) {
+              if (key === user.uid) {
                 this.dataService.getUserdata(list.payload.data()[key]).subscribe(
-                  data => this.userData = data.payload.data()
+                  data => {
+                    this.authService.loading = false;
+                    this.userData = data.payload.data();
+                  },
+                  err => console.log('no rights')
                 );
+              } else {
+                this.authService.loading = 'No User Data';
               }
             });
-          });
+          }, err => console.log('no rights'));
         }
+
       }
     );
     this.firstLoad = true;
   }
-
 }

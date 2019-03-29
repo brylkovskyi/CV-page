@@ -11,35 +11,34 @@ import {BehaviorSubject} from 'rxjs';
 export class AuthService {
   provider = new GoogleAuthProvider();
   authStatus = new BehaviorSubject(null);
-  uid: string;
+  loading;
+
+  constructor(private auth: AngularFireAuth) {
+  }
 
   authStatusChecker() {
+    this.loading = 'Checking Authorization';
+    this.authStatus.next(null);
     this.auth.auth.onAuthStateChanged(user => {
-      if (user) {
-        this.authStatus.next(user.uid);
-      } else {
-        this.signIn();
-      }
+      this.loading = false;
+      this.authStatus.next(user);
+    }, err => {
+      this.loading = 'Error on Authorization Stage';
+      console.log(err);
+      this.authStatus.next(false);
     });
   }
 
   signIn() {
-    this.auth.auth.signInWithPopup(this.provider).then(authData => {
-      this.authStatus.next(authData.user.uid);
-      this.uid = authData.user.uid;
-
-    }).catch(error => {
-      console.log(error);
-      this.authStatus.next(null);
-    });
+    this.auth.auth.signInWithRedirect(this.provider);
   }
 
   signOut() {
-    return this.auth.auth.signOut();
+    this.auth.auth.signOut().then(_ => this.authStatus.next(false)
+    );
   }
 
-  constructor(private auth: AngularFireAuth) {
-  }
+
 
 }
 
