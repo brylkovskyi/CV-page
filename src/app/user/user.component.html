@@ -1,2 +1,40 @@
-<app-photo></app-photo>
-<p>user works</p>
+<div *ngIf="userData; else noData" class="container">
+    <div class="main">
+        <aside class="aside">
+            <app-photo class="photo" [photo]="userData.photoURL"></app-photo>
+            <app-aside-table class="firstAsideTable" [data]="userData.data[0]"></app-aside-table>
+            <app-aside-table [data]="userData.data[1]"></app-aside-table>
+            <ul>
+                <li *ngFor="let group of userData.data; index as i;" (click)="scrollTo(group.groupName)"><span *ngIf="i>3">{{group.groupName}}</span>
+                </li>
+            </ul>
+            <div class="social">
+                <span *ngFor="let entry of userData.data[2].groupData">
+                    <i class="fab" [className]=socialRecognizer(entry.link)></i><a [href]=entry.link target="_blank">{{entry.name}}</a>
+                </span>
+            </div>
+        </aside>
+        <section>
+            <header class="title">
+                <h1 (click)="firstLoad=true;" [ngClass]="{'no-welcome': !firstLoad}">{{userData.name}}</h1>
+                <h2 (click)="authService.signOut()">{{userData.profession}}</h2>
+            </header>
+            <section class="info" [ngClass]="{'about':!firstLoad}">
+                <ng-scrollbar shown='hover' class='my-scrollbar'>
+                    <app-info-welcome *ngIf='firstLoad; else information' (load)="loadWatcher()" [data]="userData.data[3]"></app-info-welcome>
+                    <ng-template #information>
+                        <div *ngFor="let group of userData.data; index as i;">
+                            <app-info-about [id]=group.groupName *ngIf="i>3" [data]="group"></app-info-about>
+                        </div>
+                    </ng-template>
+                </ng-scrollbar>
+            </section>
+        </section>
+    </div>
+</div>
+<ng-template #noData>
+    <span *ngIf="authService.loading">{{authService.loading}}</span>
+    <br/>
+    <button *ngIf="authService.loading === 'No User Data'" (click)="authService.signOut()">Sign Out</button>
+    <button *ngIf="authService.loading === 'You are not signed in'" (click)="authService.signIn()">Sign In</button>
+</ng-template>

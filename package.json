@@ -4,22 +4,27 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "ng build --prod --aot && firebase deploy"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~7.2.0",
+    "@angular/cdk": "^7.3.4",
     "@angular/common": "~7.2.0",
     "@angular/compiler": "~7.2.0",
     "@angular/core": "~7.2.0",
+    "@angular/fire": "^5.1.2",
     "@angular/forms": "~7.2.0",
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "core-js": "^2.5.4",
+    "firebase": "^5.9.1",
+    "ngx-scrollbar": "^4.1.1",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"

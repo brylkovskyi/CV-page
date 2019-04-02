@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-aside-table',
@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AsideTableComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
+
+  @Input() data: any;
+  title: string;
 
   ngOnInit() {
+    this.title = this.data.groupName;
   }
 
 }
