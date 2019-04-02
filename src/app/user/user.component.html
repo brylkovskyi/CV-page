@@ -36,5 +36,5 @@
     <span *ngIf="authService.loading">{{authService.loading}}</span>
     <br/>
     <button *ngIf="authService.loading === 'No User Data'" (click)="authService.signOut()">Sign Out</button>
-    <button *ngIf="!authService.loading && !authStatus" (click)="authService.signIn()">Sign In</button>
+    <button *ngIf="authService.loading === 'You are not signed in'" (click)="authService.signIn()">Sign In</button>
 </ng-template>

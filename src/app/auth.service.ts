@@ -20,7 +20,8 @@ export class AuthService {
     this.loading = 'Checking Authorization';
     this.authStatus.next(null);
     this.auth.auth.onAuthStateChanged(user => {
-      this.loading = false;
+      user ? this.loading = false : this.loading = 'You are not signed in';
+      console.log(this.loading);
       this.authStatus.next(user);
     }, err => {
       this.loading = 'Error on Authorization Stage';
@@ -34,7 +35,7 @@ export class AuthService {
   }
 
   signOut() {
-    this.auth.auth.signOut().then(_ => this.authStatus.next(false)
+    this.auth.auth.signOut().then(() => this.authStatus.next(false)
     );
   }
 

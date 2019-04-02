@@ -47,15 +47,17 @@ export class UserComponent implements OnInit {
 
 
   ngOnInit() {
-    this.authService.loading = 'Checking Authorization';
+    // this.authService.loading = 'Checking Authorization';
     this.authService.authStatusChecker();
     this.authService.authStatus.subscribe(user => {
+        this.changeDetector.detectChanges();
         this.authStatus = user;
         if (!user) {
           this.userData = null;
         }
         if (user) {
           this.authService.loading = 'Loading User Data';
+
           this.dataService.getUsersList().subscribe(list => {
             Object.keys(list.payload.data()).forEach(key => {
               if (key === user.uid) {
@@ -64,13 +66,13 @@ export class UserComponent implements OnInit {
                     this.authService.loading = false;
                     this.userData = data.payload.data();
                   },
-                  err => console.log('no rights')
+                  err => console.log('no rights', err)
                 );
               } else {
                 this.authService.loading = 'No User Data';
               }
             });
-          }, err => console.log('no rights'));
+          }, err => console.log('no rights', err));
         }
 
       }
