@@ -6,7 +6,7 @@ import {AsideTableComponent} from './aside-table/aside-table.component';
 import {InfoAboutComponent} from './info-about/info-about.component';
 import {InfoWelcomeComponent} from './info-welcome/info-welcome.component';
 import {UserRoutingModule} from './user-routing.module';
-import {UserService} from './user.service';
+import {DataService} from './data.service';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../../environments/environment';
@@ -16,7 +16,7 @@ import {AuthService} from '../auth.service';
 
 @NgModule({
   declarations: [UserComponent, AsideTableComponent, InfoAboutComponent, InfoWelcomeComponent],
-  providers: [UserService, AuthService],
+  providers: [DataService, AuthService],
   imports: [
     NgScrollbarModule,
     CommonModule,

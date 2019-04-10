@@ -21,7 +21,6 @@ export class AuthService {
     this.authStatus.next(null);
     this.auth.auth.onAuthStateChanged(user => {
       user ? this.loading = false : this.loading = 'You are not signed in';
-      console.log(this.loading);
       this.authStatus.next(user);
     }, err => {
       this.loading = 'Error on Authorization Stage';
