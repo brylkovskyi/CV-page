@@ -1,29 +1,35 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {UserService} from './user.service';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {DataService} from './data.service';
 import {AuthService} from '../auth.service';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {DisplayWidth} from '../shared/display.class';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
   userData;
-  firstLoad;
+  tab;
   authStatus;
+  unsubscribe = new Subject();
+  layout;
 
   constructor(
-    private dataService: UserService,
+    private dataService: DataService,
     private changeDetector: ChangeDetectorRef,
     private authService: AuthService) {
+    super();
   }
 
-  loadWatcher() {
-    this.firstLoad = false;
+  loadWatcher(tab) {
+    this.tab = tab;
   }
 
   scrollTo(name) {
-    this.firstLoad = false;
+    this.tab = 'about';
     this.changeDetector.detectChanges();
     document.getElementById(name).scrollIntoView({behavior: 'smooth', block: 'start'});
   }
@@ -47,21 +53,22 @@ export class UserComponent implements OnInit {
 
 
   ngOnInit() {
-    // this.authService.loading = 'Checking Authorization';
+    this.desctopView.pipe(takeUntil(this.unsubscribe), debounceTime(300))
+      .subscribe(data => {
+        this.layout = data;
+      });
     this.authService.authStatusChecker();
-    this.authService.authStatus.subscribe(user => {
-        this.changeDetector.detectChanges();
+    this.authService.authStatus.pipe(takeUntil(this.unsubscribe)).subscribe(user => {
         this.authStatus = user;
         if (!user) {
           this.userData = null;
         }
         if (user) {
           this.authService.loading = 'Loading User Data';
-
-          this.dataService.getUsersList().subscribe(list => {
+          this.dataService.getUsersList().pipe(takeUntil(this.unsubscribe)).subscribe(list => {
             Object.keys(list.payload.data()).forEach(key => {
               if (key === user.uid) {
-                this.dataService.getUserdata(list.payload.data()[key]).subscribe(
+                this.dataService.getUserdata(list.payload.data()[key]).pipe(takeUntil(this.unsubscribe)).subscribe(
                   data => {
                     this.authService.loading = false;
                     this.userData = data.payload.data();
@@ -77,6 +84,33 @@ export class UserComponent implements OnInit {
 
       }
     );
-    this.firstLoad = true;
+
+    // no auth test version start
+
+    this.dataService.getUsersList().pipe(takeUntil(this.unsubscribe)).subscribe(list => {
+      Object.keys(list.payload.data()).forEach(key => {
+        const uid = 'EGD5JCB5KkZEQbkJk465c04rLUq2';
+        if (key === uid) {
+          this.dataService.getUserdata(list.payload.data()[key]).pipe(takeUntil(this.unsubscribe)).subscribe(
+            data => {
+              this.authService.loading = false;
+              this.userData = data.payload.data();
+            },
+            err => console.log('no rights', err)
+          );
+        } else {
+          this.authService.loading = 'No User Data';
+        }
+      });
+    }, err => console.log('no rights', err));
+
+    // no auth test version end
+
+    this.tab = 'welcome';
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

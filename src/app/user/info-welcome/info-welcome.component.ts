@@ -1,12 +1,13 @@
 import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
+import {DisplayWidth} from '../../shared/display.class';
 
 @Component({
   selector: 'app-info-welcome',
   templateUrl: './info-welcome.component.html',
   styleUrls: ['./info-welcome.component.scss']
 })
-export class InfoWelcomeComponent implements OnInit {
+export class InfoWelcomeComponent extends DisplayWidth implements OnInit {
   @Input() data: any;
   @Output() load = new EventEmitter();
   domElement;
@@ -20,6 +21,7 @@ export class InfoWelcomeComponent implements OnInit {
 
 
   constructor(private sanitizer: DomSanitizer) {
+    super();
   }
 
   ngOnInit() {

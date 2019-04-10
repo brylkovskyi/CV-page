@@ -5,7 +5,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class DataService {
 
   getUserdata(userId) {
     return this.db.doc('users/' + userId).snapshotChanges();
