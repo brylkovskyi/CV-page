@@ -48,27 +48,26 @@
                 </nav>
             </header>
             <section class="info-m" [ngClass]="{'about':tab !== 'welcome'}">
-                <ng-scrollbar shown='hover' class='my-scrollbar'>
-                    <app-info-welcome *ngIf="tab === 'welcome'; else information" (load)="loadWatcher('about')"
-                                      [data]="userData.data[3]"></app-info-welcome>
-                    <ng-template #information>
-                        <div *ngIf="tab === 'about'; else personal">
-                            <div *ngFor="let group of userData.data; index as i;">
-                                <app-info-about [id]=group.groupName *ngIf="i>3" [data]="group"></app-info-about>
-                            </div>
+                <app-info-welcome *ngIf="tab === 'welcome'; else information" (load)="loadWatcher('about')"
+                                  [data]="userData.data[3]"></app-info-welcome>
+                <ng-template #information>
+                    <div *ngIf="tab === 'about'; else personal">
+                        <div *ngFor="let group of userData.data; index as i;">
+                            <app-info-about [id]=group.groupName *ngIf="i>3" [data]="group"></app-info-about>
                         </div>
-                        <ng-template #personal>
-                            <app-aside-table class="firstAsideTable" [data]="userData.data[0]"></app-aside-table>
-                            <app-aside-table [data]="userData.data[1]"></app-aside-table>
-                        </ng-template>
+                    </div>
+                    <ng-template #personal>
+                        <app-aside-table class="firstAsideTable" [data]="userData.data[0]"></app-aside-table>
+                        <app-aside-table [data]="userData.data[1]"></app-aside-table>
                     </ng-template>
-                </ng-scrollbar>
-            </section>
-            <footer class="social-m">
+                </ng-template>
+                <footer class="social-m">
                 <span *ngFor="let entry of userData.data[2].groupData">
                     <i class="fab" [className]=socialRecognizer(entry.link)></i><a [href]=entry.link target="_blank">{{entry.name}}</a>
                 </span>
-            </footer>
+                </footer>
+            </section>
+
         </div>
     </ng-template>
 </div>

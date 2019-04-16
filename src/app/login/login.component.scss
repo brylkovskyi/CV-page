@@ -6,8 +6,13 @@
   height: 100%;
   width: 100%;
 
-  p {
-    font-size: 18px;
+  a {
+    font-size: 24px;
     font-weight: 400;
+    color: #b0b0b0;
+    margin: 20px;
+  }
+  a:last-child {
+    color: unset;
   }
 }
