@@ -256,8 +256,10 @@
   }
 
   .info-m {
-    margin-top: 14em;
-    padding: 15px 25px;
+    position: absolute;
+    width: 100%;
+    top: 14em;
+    padding: 0 25px 20px 25px;
     margin-bottom: 3.5em;
     background-color: #fff;
 
@@ -297,7 +299,7 @@
 
     app-aside-table::ng-deep {
       display: block;
-      margin-bottom: 20px;
+      margin-top: 20px;
 
       thead {
         display: none;
@@ -341,8 +343,15 @@
   }
 }
 
+@media (max-width: 700px) {
+  .container {
+    background-image: unset;
+    background-color: #fff;
+  }
+}
+
 @media (max-width: 700px) and (min-width: 550px) {
-  .container-m {
+   .container-m {
     font-size: 14px;
   }
 }
@@ -356,7 +365,7 @@
 @media (max-width: 700px) and (orientation: landscape)  {
   .container-m footer.social-m {
     position: absolute;
-    bottom: 0;
+    bottom: -3.5em;
     left: 0;
   }
   .container-m header {

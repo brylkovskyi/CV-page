@@ -5,11 +5,13 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NameResolverComponent } from './name-resolver/name-resolver.component';
+import {LoginComponent} from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NameResolverComponent
+    NameResolverComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
