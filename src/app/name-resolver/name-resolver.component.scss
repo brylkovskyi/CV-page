@@ -5,9 +5,67 @@
   flex-flow: column;
   height: 100%;
   width: 100%;
+  font-size: 18px;
 
-  p {
-    font-size: 18px;
-    font-weight: 400;
+  .center-container {
+    position: relative;
+    background: #ffffff;
+    -webkit-box-shadow: -40px 40px 100px 0px rgba(0, 0, 0, 0.67);
+    -moz-box-shadow: -40px 40px 100px 0px rgba(0, 0, 0, 0.67);
+    box-shadow: -40px 40px 100px 0px rgba(0, 0, 0, 0.67);
+
+    a {
+      transition: color 0.2s ease-in;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    div {
+      width: 100%;
+      background-color: #363636;
+      text-align: center;
+
+      h1 {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 20px;
+        font-weight: 400;
+        padding: 30px;
+        color: white;
+        text-align: left;
+
+        i {
+          font-weight: 500;
+          color: white;
+        }
+
+        i.disclaimer {
+          font-size: 12px;
+          font-weight: 400;
+        }
+      }
+    }
+
+    .content {
+      display: inline-block;
+      padding: 15px;
+
+      span {
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      a {
+        color: #787878;
+        font-size: 17px;
+        font-weight: 500;
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      a:hover {
+        color: #9b9b9b;
+      }
+    }
   }
 }

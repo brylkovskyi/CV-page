@@ -1,28 +1,40 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {DataService} from './data.service';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {DataService} from '../data.service';
 import {AuthService} from '../auth.service';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {DisplayWidth} from '../shared/display.class';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {LoadingService} from '../loading.service';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
+
 export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
-  userData;
   tab;
-  authStatus;
   unsubscribe = new Subject();
   layout;
+  userData;
+  active = this.dataService.activeField;
+  loading = this.loadingService.loadingSetter;
+
+
 
   constructor(
     private dataService: DataService,
     private changeDetector: ChangeDetectorRef,
-    private authService: AuthService) {
+    public authService: AuthService,
+    private route: ActivatedRoute,
+    private loadingService: LoadingService
+  ) {
     super();
   }
+
+  @Input() userDataInput;
+  @Input() activeField;
 
   loadWatcher(tab) {
     this.tab = tab;
@@ -40,72 +52,51 @@ export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
     const facebook = /facebook.com/;
     const twitter = /twitter.com/;
     const linkedin = /linkedin.com/;
-    if (facebook.test(link)) {
+    let reserved = null;
+
+    if (facebook.test(link) && !reserved) {
+      reserved = true;
       return className + 'facebook';
     }
-    if (twitter.test(link)) {
+    if (twitter.test(link) && !reserved) {
+      reserved = true;
       return className + 'twitter';
     }
-    if (linkedin.test(link)) {
+    if (linkedin.test(link) && !reserved) {
+      reserved = true;
       return className + 'linkedin';
+    }
+    if (!reserved) {
+      return 'fas fa-link';
     }
   }
 
-
   ngOnInit() {
-    this.desctopView.pipe(takeUntil(this.unsubscribe), debounceTime(300))
+    this.loading(true);
+    this.route.paramMap.pipe(
+      switchMap((data: ParamMap) => this.dataService.getUserdata(data.get('id'))),
+      takeUntil(this.unsubscribe)
+    )
+      .subscribe(data => {
+        this.loading(false);
+        if (data) {
+          if (this.userDataInput) {
+            this.userData = this.userDataInput;
+            this.unsubscribe.next();
+            this.unsubscribe.complete();
+          } else {
+            this.userData = data;
+          }
+        }
+      });
+
+    this.desctopView.pipe(
+      takeUntil(this.unsubscribe),
+      debounceTime(300)
+    )
       .subscribe(data => {
         this.layout = data;
       });
-    this.authService.authStatusChecker();
-    this.authService.authStatus.pipe(takeUntil(this.unsubscribe)).subscribe(user => {
-        this.authStatus = user;
-        if (!user) {
-          this.userData = null;
-        }
-        if (user) {
-          this.authService.loading = 'Loading User Data';
-          this.dataService.getUsersList().pipe(takeUntil(this.unsubscribe)).subscribe(list => {
-            Object.keys(list.payload.data()).forEach(key => {
-              if (key === user.uid) {
-                this.dataService.getUserdata(list.payload.data()[key]).pipe(takeUntil(this.unsubscribe)).subscribe(
-                  data => {
-                    this.authService.loading = false;
-                    this.userData = data.payload.data();
-                  },
-                  err => console.log('no rights', err)
-                );
-              } else {
-                this.authService.loading = 'No User Data';
-              }
-            });
-          }, err => console.log('no rights', err));
-        }
-
-      }
-    );
-
-    // no auth test version start
-
-    this.dataService.getUsersList().pipe(takeUntil(this.unsubscribe)).subscribe(list => {
-      Object.keys(list.payload.data()).forEach(key => {
-        const uid = 'EGD5JCB5KkZEQbkJk465c04rLUq2';
-        if (key === uid) {
-          this.dataService.getUserdata(list.payload.data()[key]).pipe(takeUntil(this.unsubscribe)).subscribe(
-            data => {
-              this.authService.loading = false;
-              this.userData = data.payload.data();
-            },
-            err => console.log('no rights', err)
-          );
-        } else {
-          this.authService.loading = 'No User Data';
-        }
-      });
-    }, err => console.log('no rights', err));
-
-    // no auth test version end
-
     this.tab = 'welcome';
   }
 

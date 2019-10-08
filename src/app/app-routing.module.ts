@@ -1,15 +1,18 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {NameResolverComponent} from './name-resolver/name-resolver.component';
 import {LoginComponent} from './login/login.component';
+import {AuthGuard} from './login/auth.guard';
 
 const routes: Routes = [
   {
-    path: 'user',
+    path: 'view',
     loadChildren: './user/user.module#UserModule'
   },
   {
-    path: 'admin',
+    path: 'edit',
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     loadChildren: './admin/admin.module#AdminModule'
   },
   {
@@ -25,8 +28,6 @@ const routes: Routes = [
     path: '**',
     component: NameResolverComponent
   },
-
-
 ];
 
 @NgModule({

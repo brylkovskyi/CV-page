@@ -1,7 +1,7 @@
 <div *ngIf="userData; else noData" class="container">
     <div *ngIf="layout; else mobile" class="main">
         <aside class="aside">
-            <app-photo class="photo" [photo]="userData.photoURL"></app-photo>
+            <app-photo class="photo" [photo]="userData?.photoURL"></app-photo>
             <app-aside-table class="firstAsideTable" [data]="userData.data[0]"></app-aside-table>
             <app-aside-table [data]="userData.data[1]"></app-aside-table>
             <ul>
@@ -9,7 +9,8 @@
                 </li>
             </ul>
             <div class="social">
-                <span *ngFor="let entry of userData.data[2].groupData">
+                <span *ngFor="let entry of userData.data[2].groupData"
+                      [ngClass]="{'active': (entry.link | lowercase) === (active | async | lowercase)}">
                     <i class="fab" [className]=socialRecognizer(entry.link)></i><a [href]=entry.link target="_blank">{{entry.name}}</a>
                 </span>
             </div>
@@ -17,7 +18,7 @@
         <section>
             <header class="title">
                 <h1 (click)="tab='welcome';" [ngClass]="{'no-welcome': tab !== 'welcome'}">{{userData.name}}</h1>
-                <h2 (click)="authService.signOut()">{{userData.profession}}</h2>
+                <h2>{{userData.profession}}</h2>
             </header>
             <section class="info" [ngClass]="{'about': tab!=='welcome'}">
                 <ng-scrollbar shown='hover' class='my-scrollbar'>
@@ -72,8 +73,16 @@
     </ng-template>
 </div>
 <ng-template #noData>
-    <span *ngIf="authService.loading">{{authService.loading}}</span>
-    <br/>
-    <button *ngIf="authService.loading === 'No User Data'" (click)="authService.signOut()">Sign Out</button>
-    <button *ngIf="authService.loading === 'You are not signed in'" (click)="authService.signIn()">Sign In</button>
+    <div [ngClass]="{'container': layout,'container-m': !layout}">
+        <div class="center-container">
+            <div>
+                <h1> Hello! Web address you tried to visit was not found on our server.
+                    <i class="disclaimer"><br/>Please check the url you entered carefully</i>
+                </h1>
+            </div>
+            <span class="content">
+                <a routerLink="/login">Main page ></a>
+            </span>
+        </div>
+    </div>
 </ng-template>

@@ -1,5 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
+import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {DisplayWidth} from '../../shared/display.class';
 
 @Component({
@@ -7,10 +6,10 @@ import {DisplayWidth} from '../../shared/display.class';
   templateUrl: './info-welcome.component.html',
   styleUrls: ['./info-welcome.component.scss']
 })
-export class InfoWelcomeComponent extends DisplayWidth implements OnInit {
-  @Input() data: any;
+export class InfoWelcomeComponent extends DisplayWidth {
+  @Input() data;
   @Output() load = new EventEmitter();
-  domElement;
+
 
   @HostListener('click', ['$event.target'])
   onClick(element) {
@@ -19,13 +18,7 @@ export class InfoWelcomeComponent extends DisplayWidth implements OnInit {
     }
   }
 
-
-  constructor(private sanitizer: DomSanitizer) {
+  constructor() {
     super();
   }
-
-  ngOnInit() {
-    this.domElement = this.sanitizer.bypassSecurityTrustHtml(this.data.copy);
-  }
-
 }
