@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import {NameResolverComponent} from './name-resolver/name-resolver.component';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './login/auth.guard';
@@ -7,13 +7,13 @@ import {AuthGuard} from './login/auth.guard';
 const routes: Routes = [
   {
     path: 'view',
-    loadChildren: './user/user.module#UserModule'
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
   {
     path: 'edit',
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
-    loadChildren: './admin/admin.module#AdminModule'
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: 'login',
