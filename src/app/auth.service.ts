@@ -1,44 +1,41 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
-import {BehaviorSubject} from 'rxjs';
-
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   provider = new GoogleAuthProvider();
-  authStatus = new BehaviorSubject(null);
-  loading;
+  authStatus = new Subject <firebase.User | null>();
 
-  constructor(private auth: AngularFireAuth) {
+  constructor(private auth: AngularFireAuth, private zone: NgZone) {
   }
 
   authStatusChecker() {
-    this.loading = 'Checking Authorization';
-    this.authStatus.next(null);
-    this.auth.auth.onAuthStateChanged(user => {
-      user ? this.loading = false : this.loading = 'You are not signed in';
-      this.authStatus.next(user);
-    }, err => {
-      this.loading = 'Error on Authorization Stage';
-      console.log(err);
-      this.authStatus.next(false);
-    });
+    this.auth.auth.onAuthStateChanged(
+      user => {
+        // console.log(user);
+        this.zone.run(() => this.authStatus.next(user));
+      },
+      err => {
+        this.zone.run(() => {
+          console.log(err);
+          this.authStatus.next(null);
+        });
+      });
+    return this.authStatus;
   }
 
   signIn() {
-    this.auth.auth.signInWithRedirect(this.provider);
+    this.auth.auth.signInWithPopup(this.provider);
+      // .then((data) => console.log(data));
   }
 
   signOut() {
-    this.auth.auth.signOut().then(() => this.authStatus.next(false)
-    );
+    this.auth.auth.signOut();
   }
-
-
-
 }
 

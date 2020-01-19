@@ -1,5 +1,34 @@
 <div class="container">
-    <a routerLink="/admin">Admin</a>
-    <a routerLink="/signIn">User</a>
-    <a routerLink="/user">Taras Brylkovskyi CV</a>
+    <div *ngIf="user; else notRegistered" class="center-container">
+        <div>
+            <h1> You are logged in as <i>{{user.displayName}}</i></h1>
+            <span class="authInfo">
+                <img alt="Photo" [src]="user.photoURL">
+                <a (click)="signOut()">SignOut</a>
+            </span>
+        </div>
+
+        <span class="content">What would you like to do with your CV-form?
+            <br/>
+            <span>
+                <a (click)="editProfile()">Edit ></a>
+                <br/>
+                <a (click)="viewProfile()">Share ></a>
+            </span>
+        </span>
+
+    </div>
+    <ng-template #notRegistered>
+        <div class="center-container">
+            <div>
+                <h1> Hello! Please sign in to view or create your CV form.
+                    <i class="disclaimer"><br/>*Currently only Google Authentication is
+                    supported</i>
+                </h1>
+            </div>
+            <span class="content">
+                <a (click)="signIn()">Sign In ></a>
+            </span>
+        </div>
+    </ng-template>
 </div>

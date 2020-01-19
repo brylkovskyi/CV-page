@@ -1,6 +1,6 @@
 <div>
   <h2>{{data.groupName}}</h2>
-  <p [innerHTML]="domElement"></p>
+  <p [innerHTML]="data.copy | safe"></p>
 </div>
 
 

@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {DataService} from '../../data.service';
 
 @Component({
   selector: 'app-aside-table',
@@ -7,14 +8,16 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class AsideTableComponent implements OnInit {
 
-  constructor() {
+  constructor(private dataService: DataService) {
   }
 
+  active = this.dataService.activeField;
   @Input() data: any;
   title: string;
 
   ngOnInit() {
     this.title = this.data.groupName;
+
   }
 
 }
