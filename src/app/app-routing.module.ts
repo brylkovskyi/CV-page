@@ -12,7 +12,6 @@ const routes: Routes = [
   {
     path: 'edit',
     canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
   {
@@ -35,6 +34,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {
-
 
 }
