@@ -1,14 +1,12 @@
+export interface UserDataField {
+  groupData: any;
+  groupName: string;
+}
+
 export interface User {
-  id: string;
+  data: [UserDataField];
+  name: string;
   photoURL: string;
   profession: string;
-  personal: object[];
-  contacts: [];
-  welcomeMessage: string;
-  about: string;
-  skills: string;
-  experience: [];
-  education: [];
-  interests: string;
-  social: [];
 }
+

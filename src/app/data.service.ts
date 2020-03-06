@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {switchMap} from 'rxjs/operators';
-import {Subject, of} from 'rxjs';
+import {switchMap, tap} from 'rxjs/operators';
+import {Subject, of, Observable, from} from 'rxjs';
+import {UserData} from '../assets/user-mock';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class DataService {
       if (user) {
         return this.db.doc('users/' + user).valueChanges();
       } else {
-        return of(false);
+        return this.createUser(UserData, userId);
       }
     };
 
@@ -39,10 +40,15 @@ export class DataService {
   }
 
   createUser(user, userId) {
-    this.db.collection('users').add(user).then(data => {
-      this.usersList[userId] = data.id;
-      this.addToUserList(this.usersList).then(() => console.log('new entry'));
-    });
+    const addUserObservable = from(this.db.collection('users').add(user));
+
+    return addUserObservable.pipe(
+      tap(data => {
+        this.usersList[userId] = data.id;
+      }),
+      switchMap(() => this.addToUserList(this.usersList)),
+      switchMap(() => this.db.doc('users/' + this.usersList[userId]).valueChanges())
+    );
   }
 
   addToUserList(userList) {
@@ -59,7 +65,6 @@ export class DataService {
   deleteUser(userId: string) {
     this.db.doc('users/' + userId).delete();
   }
-
 
 }
 

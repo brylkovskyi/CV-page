@@ -1,11 +1,13 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
 import {AuthService} from '../auth.service';
-import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {auditTime, debounceTime, filter, switchMap, takeUntil, throttleTime} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
 import {DisplayWidth} from '../shared/display.class';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {LoadingService} from '../loading.service';
+import { User } from '../shared/user-interface';
+import {MyData} from '../../assets/user-mock';
 
 @Component({
   selector: 'app-user',
@@ -16,28 +18,30 @@ import {LoadingService} from '../loading.service';
 export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
   tab;
   unsubscribe = new Subject();
-  layout;
-  userData;
+  userData: User;
   active = this.dataService.activeField;
   loading = this.loadingService.loadingSetter;
-
-
 
   constructor(
     private dataService: DataService,
     private changeDetector: ChangeDetectorRef,
     public authService: AuthService,
     private route: ActivatedRoute,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private router: Router
   ) {
     super();
   }
 
-  @Input() userDataInput;
+  @Input() inputUserData;
   @Input() activeField;
 
   loadWatcher(tab) {
     this.tab = tab;
+  }
+
+  navigateHome() {
+    this.router.navigate(['login']);
   }
 
   scrollTo(name) {
@@ -71,32 +75,26 @@ export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loading(true);
     this.route.paramMap.pipe(
-      switchMap((data: ParamMap) => this.dataService.getUserdata(data.get('id'))),
+      switchMap((routeData: ParamMap) => this.dataService.getUserdata(routeData.get('id'))),
+      filter(Boolean),
       takeUntil(this.unsubscribe)
     )
-      .subscribe(data => {
+      .subscribe((serverUserData: User) => {
         this.loading(false);
-        if (data) {
-          if (this.userDataInput) {
-            this.userData = this.userDataInput;
-            this.unsubscribe.next();
-            this.unsubscribe.complete();
-          } else {
-            this.userData = data;
-          }
+
+        if (this.inputUserData) {
+          this.userData = this.inputUserData;
+          this.unsubscribe.next();
+          this.unsubscribe.complete();
+        } else {
+          this.userData = serverUserData;
         }
+
       });
 
-    this.desctopView.pipe(
-      takeUntil(this.unsubscribe),
-      debounceTime(300)
-    )
-      .subscribe(data => {
-        this.layout = data;
-      });
     this.tab = 'welcome';
   }
 

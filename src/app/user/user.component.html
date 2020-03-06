@@ -1,5 +1,5 @@
 <div *ngIf="userData; else noData" class="container">
-    <div *ngIf="layout; else mobile" class="main">
+    <div *ngIf="desktopView | async; else mobile" class="main">
         <aside class="aside">
             <app-photo class="photo" [photo]="userData?.photoURL"></app-photo>
             <app-aside-table class="firstAsideTable" [data]="userData.data[0]"></app-aside-table>
@@ -11,7 +11,7 @@
             <div class="social">
                 <span *ngFor="let entry of userData.data[2].groupData"
                       [ngClass]="{'active': (entry.link | lowercase) === (active | async | lowercase)}">
-                    <i class="fab" [className]=socialRecognizer(entry.link)></i><a [href]=entry.link target="_blank">{{entry.name}}</a>
+                    <i class="fab" [className]=socialRecognizer(entry.link)></i><a [href]=entry.link target="_blank">{{entry.title}}</a>
                 </span>
             </div>
         </aside>
@@ -71,9 +71,10 @@
 
         </div>
     </ng-template>
+    <button (click)="navigateHome()" class="home">HOME</button>
 </div>
 <ng-template #noData>
-    <div [ngClass]="{'container': layout,'container-m': !layout}">
+    <div [ngClass]="(desktopView | async) ? 'container': 'container-m'">
         <div class="center-container">
             <div>
                 <h1> Hello! Web address you tried to visit was not found on our server.

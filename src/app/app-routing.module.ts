@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {NameResolverComponent} from './name-resolver/name-resolver.component';
+import {UnknownPageComponent} from './unknown-page/unknown-page.component';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './login/auth.guard';
 
@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: NameResolverComponent
+    component: UnknownPageComponent
   },
 ];
 
