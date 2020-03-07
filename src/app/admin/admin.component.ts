@@ -3,7 +3,6 @@ import {DataService} from '../data.service';
 import {delay, mapTo, switchMap, takeUntil} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {merge, of, Subject} from 'rxjs';
-import {UserData} from '../../assets/user-mock';
 import {AuthService} from '../auth.service';
 
 @Component({
@@ -95,7 +94,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         if (data) {
           this.userData = data;
         } else {
-          this.dataService.createUser(UserData, this.userId);
+          this.dataService.createUser(this.userId);
         }
       });
   }

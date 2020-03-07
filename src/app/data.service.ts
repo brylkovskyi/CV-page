@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore} from '@angular/fire/firestore';
-import {switchMap, tap} from 'rxjs/operators';
-import {Subject, of, Observable, from} from 'rxjs';
+import {AngularFirestore, DocumentSnapshot} from '@angular/fire/firestore';
+import {filter, map, mergeMap, switchMap, take, tap} from 'rxjs/operators';
+import {Subject, from, throwError} from 'rxjs';
 import {UserData} from '../assets/user-mock';
 
 @Injectable({
@@ -15,44 +15,48 @@ export class DataService {
   activeField = new Subject();
   usersList;
 
-  getUserdata(userId) {
-    const userFromList = (data) => {
-      this.usersList = data.payload.data();
-      let user = null;
-      Object.keys(data.payload.data()).forEach(key => {
-        if (key === userId) {
-          user = data.payload.data()[key];
-        }
-      });
-      if (user) {
-        return this.db.doc('users/' + user).valueChanges();
-      } else {
-        return this.createUser(UserData, userId);
-      }
-    };
 
+  getUserdata(userId) {
     return this.getUsersList().pipe(
-      switchMap(list => userFromList(list)));
+      tap(usersList => {
+        if (Object.keys(usersList.payload.data()).length > 0) {
+          this.usersList = usersList.payload.data();
+        }
+      }),
+      filter(usersList => Object.keys(usersList.payload.data())[0] === userId),
+      map(item => item ? item[userId] : this.createUser(UserData)),
+      switchMap(firebaseId => this.db.doc('users/' + firebaseId).snapshotChanges())
+    );
   }
 
   getUsersList() {
     return this.db.doc('users/userslist').snapshotChanges();
   }
 
-  createUser(user, userId) {
-    const addUserObservable = from(this.db.collection('users').add(user));
-
-    return addUserObservable.pipe(
-      tap(data => {
-        this.usersList[userId] = data.id;
+  createUser(userId) {
+    const mockedUserData = UserData;
+    mockedUserData.id = userId;
+    let firebaseId = null;
+    let firebaseUserData;
+    return this.getUsersList().pipe(
+      mergeMap(item => Object.keys(item.payload.data()).includes(userId) ?
+        throwError('user already exists') : from(this.db.collection('users').add(mockedUserData))
+      ),
+      take(1),
+      tap(receivedUserData => {
+        firebaseUserData = receivedUserData;
+        firebaseId = receivedUserData.id;
       }),
-      switchMap(() => this.addToUserList(this.usersList)),
-      switchMap(() => this.db.doc('users/' + this.usersList[userId]).valueChanges())
+      switchMap(() => this.addToUserList(firebaseId, userId)),
+      switchMap(() => from(firebaseUserData.get())),
+      map((data: DocumentSnapshot<{}>) => data.data())
     );
   }
 
-  addToUserList(userList) {
-    return this.db.doc('users/userslist').update(userList);
+  addToUserList(firebaseId, userId) {
+    const usListItem = {};
+    usListItem[userId] = firebaseId;
+    return this.db.doc('users/userslist').set(usListItem, {merge: true});
   }
 
   updateUser(userId, userData) {

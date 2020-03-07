@@ -3,6 +3,7 @@ import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase/app';
 import {LoadingService} from '../loading.service';
+import {DataService} from '../data.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private router: Router,
+              private dataService: DataService,
               private loadingService: LoadingService) {}
 
   user: firebase.User | null;
@@ -26,7 +28,9 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-
+  createUser() {
+    this.dataService.createUser(this.user.uid).subscribe(console.log);
+  }
   signIn() {
     this.authService.signIn();
   }
