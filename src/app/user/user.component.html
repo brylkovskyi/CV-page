@@ -22,7 +22,7 @@
             </header>
             <section class="info" [ngClass]="{'about': tab!=='welcome'}">
                 <ng-scrollbar shown='hover' class='my-scrollbar'>
-                    <app-info-welcome *ngIf="tab === 'welcome'; else information" (load)="loadWatcher()" [data]="userData.data[3]"></app-info-welcome>
+                    <app-info-welcome *ngIf="tab === 'welcome'; else information" (load)="loadWatcher(loadingSetter)" [data]="userData.data[3]"></app-info-welcome>
                     <ng-template #information>
                         <div *ngFor="let group of userData.data; index as i;">
                             <app-info-about [id]=group.groupName *ngIf="i>3" [data]="group"></app-info-about>

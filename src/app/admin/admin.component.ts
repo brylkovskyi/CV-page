@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
-import {delay, mapTo, switchMap, takeUntil} from 'rxjs/operators';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {delay, mapTo, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {merge, of, Subject} from 'rxjs';
-import {AuthService} from '../auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -12,11 +11,7 @@ import {AuthService} from '../auth.service';
 })
 export class AdminComponent implements OnInit, OnDestroy {
 
-  constructor(private dataService: DataService,
-              private route: ActivatedRoute,
-              private authService: AuthService,
-              private router: Router) {
-  }
+  constructor(private dataService: DataService, private route: ActivatedRoute) {}
 
   userId;
   userData;
@@ -63,31 +58,22 @@ export class AdminComponent implements OnInit, OnDestroy {
       takeUntil(this.unsubscribe)
     )
       .subscribe(
-      () => {
-        this.updateConfirm = 'Updated';
-        this.timerFunction();
-      },
-      error => {
-        this.updateConfirm = 'Update problem (check console)';
-        this.timerFunction();
-        console.log(error);
-      }
-    );
+        () => {
+          this.updateConfirm = 'Updated';
+          this.timerFunction();
+        },
+        error => {
+          this.updateConfirm = 'Update problem (check console)';
+          this.timerFunction();
+          console.log(error);
+        }
+      );
   }
 
-  getUserdata(userId) {
-    this.userId = userId;
-    return this.dataService.getUserdata(userId);
-  }
-
-  signOut() {
-    this.authService.signOut();
-    this.router.navigate(['login']);
-  }
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.paramMap.pipe(
-      switchMap((data: ParamMap) => this.getUserdata(data.get('id'))),
+      tap((routeData: ParamMap) => this.userId = routeData.get('id')),
+      switchMap((routeData: ParamMap) => this.dataService.getUserData(routeData.get('id'))),
       takeUntil(this.unsubscribe)
     )
       .subscribe(data => {

@@ -28,9 +28,9 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-  createUser() {
-    this.dataService.createUser(this.user.uid).subscribe(console.log);
-  }
+  // createUser() {
+  //   this.dataService.createUser(this.user.uid).subscribe(console.log);
+  // }
   signIn() {
     this.authService.signIn();
   }

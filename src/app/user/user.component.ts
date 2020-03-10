@@ -1,13 +1,12 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
 import {AuthService} from '../auth.service';
-import {auditTime, debounceTime, filter, switchMap, takeUntil, throttleTime} from 'rxjs/operators';
-import {Observable, Subject} from 'rxjs';
+import {catchError, filter, switchMap, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 import {DisplayWidth} from '../shared/display.class';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {LoadingService} from '../loading.service';
 import { User } from '../shared/user-interface';
-import {MyData} from '../../assets/user-mock';
 
 @Component({
   selector: 'app-user',
@@ -78,8 +77,7 @@ export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loading(true);
     this.route.paramMap.pipe(
-      switchMap((routeData: ParamMap) => this.dataService.getUserdata(routeData.get('id'))),
-      filter(Boolean),
+      switchMap((routeData: ParamMap) => this.dataService.getUserData(routeData.get('id'))),
       takeUntil(this.unsubscribe)
     )
       .subscribe((serverUserData: User) => {
