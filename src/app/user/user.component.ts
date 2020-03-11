@@ -1,12 +1,12 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
 import {AuthService} from '../auth.service';
-import {catchError, filter, switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {DisplayWidth} from '../shared/display.class';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {LoadingService} from '../loading.service';
-import { User } from '../shared/user-interface';
+import {User} from '../shared/user-interface';
 
 @Component({
   selector: 'app-user',
@@ -55,23 +55,17 @@ export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
     const facebook = /facebook.com/;
     const twitter = /twitter.com/;
     const linkedin = /linkedin.com/;
-    let reserved = null;
 
-    if (facebook.test(link) && !reserved) {
-      reserved = true;
+    if (facebook.test(link)) {
       return className + 'facebook';
     }
-    if (twitter.test(link) && !reserved) {
-      reserved = true;
+    if (twitter.test(link)) {
       return className + 'twitter';
     }
-    if (linkedin.test(link) && !reserved) {
-      reserved = true;
+    if (linkedin.test(link)) {
       return className + 'linkedin';
     }
-    if (!reserved) {
-      return 'fas fa-link';
-    }
+    return 'fas fa-link';
   }
 
   ngOnInit(): void {
@@ -81,6 +75,9 @@ export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
       takeUntil(this.unsubscribe)
     )
       .subscribe((serverUserData: User) => {
+        if (!serverUserData) {
+          this.router.navigate(['/404']);
+        }
         this.loading(false);
 
         if (this.inputUserData) {

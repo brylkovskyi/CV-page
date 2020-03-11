@@ -16,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
               private router: Router,
               private dataService: DataService,
-              private loadingService: LoadingService) {}
+              private loadingService: LoadingService) {
+  }
 
   user: firebase.User | null;
 
@@ -28,12 +29,18 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-  // createUser() {
-  //   this.dataService.createUser(this.user.uid).subscribe(console.log);
-  // }
-  signIn() {
+
+  signInOAuth() {
     this.authService.signIn();
   }
+
+  // signInCreds(login, password) {
+  //   const creds = {
+  //     login: login.value,
+  //     password: password.value
+  //   };
+  //   this.authService.signIn();
+  // }
 
   signOut() {
     this.authService.signOut();

@@ -11,7 +11,8 @@ import {merge, of, Subject} from 'rxjs';
 })
 export class AdminComponent implements OnInit, OnDestroy {
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) {}
+  constructor(private dataService: DataService, private route: ActivatedRoute) {
+  }
 
   userId;
   userData;
@@ -25,7 +26,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   removeActiveField() {
     this.dataService.activeField.next(null);
-
   }
 
   setActiveField(event) {
@@ -76,17 +76,12 @@ export class AdminComponent implements OnInit, OnDestroy {
       switchMap((routeData: ParamMap) => this.dataService.getUserData(routeData.get('id'))),
       takeUntil(this.unsubscribe)
     )
-      .subscribe(data => {
-        if (data) {
-          this.userData = data;
-        } else {
-          this.dataService.createUser(this.userId);
-        }
-      });
+      .subscribe(data => this.userData = data);
   }
 
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
+
 }

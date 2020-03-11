@@ -1,4 +1,4 @@
-<div *ngIf="userData; else noData" class="container">
+<div *ngIf="userData" class="container">
     <div *ngIf="desktopView | async; else mobile" class="main">
         <aside class="aside">
             <app-photo class="photo" [photo]="userData?.photoURL"></app-photo>
@@ -22,7 +22,7 @@
             </header>
             <section class="info" [ngClass]="{'about': tab!=='welcome'}">
                 <ng-scrollbar shown='hover' class='my-scrollbar'>
-                    <app-info-welcome *ngIf="tab === 'welcome'; else information" (load)="loadWatcher(loadingSetter)" [data]="userData.data[3]"></app-info-welcome>
+                    <app-info-welcome *ngIf="tab === 'welcome'; else information" (load)="loadWatcher('about')" [data]="userData.data[3]"></app-info-welcome>
                     <ng-template #information>
                         <div *ngFor="let group of userData.data; index as i;">
                             <app-info-about [id]=group.groupName *ngIf="i>3" [data]="group"></app-info-about>
@@ -73,17 +73,3 @@
     </ng-template>
     <button (click)="navigateHome()" class="home">HOME</button>
 </div>
-<ng-template #noData>
-    <div [ngClass]="(desktopView | async) ? 'container': 'container-m'">
-        <div class="center-container">
-            <div>
-                <h1> Hello! Web address you tried to visit was not found on our server.
-                    <i class="disclaimer"><br/>Please check the url you entered carefully</i>
-                </h1>
-            </div>
-            <span class="content">
-                <a routerLink="/login">Main page ></a>
-            </span>
-        </div>
-    </div>
-</ng-template>
