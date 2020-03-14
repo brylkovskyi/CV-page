@@ -34,14 +34,6 @@ export class LoginComponent implements OnInit {
     this.authService.signIn();
   }
 
-  // signInCreds(login, password) {
-  //   const creds = {
-  //     login: login.value,
-  //     password: password.value
-  //   };
-  //   this.authService.signIn();
-  // }
-
   signOut() {
     this.authService.signOut();
   }

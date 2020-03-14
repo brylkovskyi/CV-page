@@ -3,6 +3,7 @@ import {DataService} from '../data.service';
 import {delay, mapTo, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {merge, of, Subject} from 'rxjs';
+import {LoadingService} from '../loading.service';
 
 @Component({
   selector: 'app-admin',
@@ -11,9 +12,10 @@ import {merge, of, Subject} from 'rxjs';
 })
 export class AdminComponent implements OnInit, OnDestroy {
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) {
+  constructor(private dataService: DataService, private route: ActivatedRoute, private loadingService: LoadingService) {
   }
 
+  loading = this.loadingService.loadingSetter;
   userId;
   userData;
   unsubscribe = new Subject();
@@ -55,26 +57,30 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   saveEditedData() {
     this.dataService.updateUser(this.userId, this.userData).then(
-        () => {
-          this.updateConfirm = 'Updated';
-          this.timerFunction();
-        },
-        error => {
-          this.updateConfirm = 'Update problem (check console)';
-          this.timerFunction();
-          console.log(error);
-        }
-      );
+      () => {
+        this.updateConfirm = 'Updated';
+        this.timerFunction();
+      },
+      error => {
+        this.updateConfirm = 'Update problem (check console)';
+        this.timerFunction();
+        console.log(error);
+      }
+    );
   }
 
   ngOnInit(): void {
+    this.loading(true);
     this.route.paramMap.pipe(
       tap((routeData: ParamMap) => this.userId = routeData.get('id')),
       switchMap(() => this.dataService.getUserData(this.userId)),
       switchMap(user => user ? of(user) : this.dataService.createUser(this.userId)),
       takeUntil(this.unsubscribe)
     )
-      .subscribe(data => this.userData = data);
+      .subscribe(data => {
+        this.userData = data;
+        this.loading(false);
+      });
   }
 
   ngOnDestroy(): void {
