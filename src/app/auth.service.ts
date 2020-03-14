@@ -1,14 +1,14 @@
 import {Injectable, NgZone} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
-import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
+
 import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  provider = new GoogleAuthProvider();
+  provider = new firebase.auth.GoogleAuthProvider();
   authStatus = new Subject <firebase.User | null>();
 
   constructor(private auth: AngularFireAuth, private zone: NgZone) {
