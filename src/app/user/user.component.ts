@@ -1,9 +1,7 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
-import {AuthService} from '../auth.service';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {DisplayWidth} from '../shared/display.class';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {LoadingService} from '../loading.service';
 import {User} from '../shared/user-interface';
@@ -14,58 +12,18 @@ import {User} from '../shared/user-interface';
   styleUrls: ['./user.component.scss']
 })
 
-export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
-  tab;
+export class UserComponent implements OnInit, OnDestroy {
   unsubscribe = new Subject();
   userData: User;
-  active = this.dataService.activeField;
   loading = this.loadingService.loadingSetter;
 
   constructor(
     private dataService: DataService,
     private changeDetector: ChangeDetectorRef,
-    public authService: AuthService,
     private route: ActivatedRoute,
     private loadingService: LoadingService,
     private router: Router
   ) {
-    super();
-  }
-
-  @Input() inputUserData;
-  @Input() activeField;
-
-  loadWatcher(tab) {
-    this.tab = tab;
-  }
-
-  navigateHome() {
-    this.router.navigate(['login']);
-  }
-
-  scrollTo(name) {
-    this.tab = 'about';
-    this.changeDetector.detectChanges();
-    document.getElementById(name).scrollIntoView({behavior: 'smooth', block: 'start'});
-  }
-
-  socialRecognizer(link) {
-    link.toLowerCase();
-    const className = 'fab fa-';
-    const facebook = /facebook.com/;
-    const twitter = /twitter.com/;
-    const linkedin = /linkedin.com/;
-
-    if (facebook.test(link)) {
-      return className + 'facebook';
-    }
-    if (twitter.test(link)) {
-      return className + 'twitter';
-    }
-    if (linkedin.test(link)) {
-      return className + 'linkedin';
-    }
-    return 'fas fa-link';
   }
 
   ngOnInit(): void {
@@ -75,22 +33,10 @@ export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
       takeUntil(this.unsubscribe)
     )
       .subscribe((serverUserData: User) => {
-        if (!serverUserData) {
-          this.router.navigate(['/404']);
+          this.loading(false);
+          serverUserData ? this.userData = serverUserData : this.router.navigate(['/404']);
         }
-        this.loading(false);
-
-        if (this.inputUserData) {
-          this.userData = this.inputUserData;
-          this.unsubscribe.next();
-          this.unsubscribe.complete();
-        } else {
-          this.userData = serverUserData;
-        }
-
-      });
-
-    this.tab = 'welcome';
+      );
   }
 
   ngOnDestroy(): void {

@@ -54,10 +54,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   saveEditedData() {
-    this.dataService.updateUser(this.userId, this.userData).pipe(
-      takeUntil(this.unsubscribe)
-    )
-      .subscribe(
+    this.dataService.updateUser(this.userId, this.userData).then(
         () => {
           this.updateConfirm = 'Updated';
           this.timerFunction();
@@ -73,7 +70,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.pipe(
       tap((routeData: ParamMap) => this.userId = routeData.get('id')),
-      switchMap((routeData: ParamMap) => this.dataService.getUserData(routeData.get('id'))),
+      switchMap(() => this.dataService.getUserData(this.userId)),
+      switchMap(user => user ? of(user) : this.dataService.createUser(this.userId)),
       takeUntil(this.unsubscribe)
     )
       .subscribe(data => this.userData = data);

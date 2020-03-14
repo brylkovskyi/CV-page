@@ -10,6 +10,7 @@ import {AngularFireModule} from '@angular/fire';
 import {environment} from '../../environments/environment';
 import {SafePipe} from './safe.pipe';
 import {PhotoComponent} from './photo/photo.component';
+import { UserContainerComponent } from './user-container/user-container.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {PhotoComponent} from './photo/photo.component';
     InfoAboutComponent,
     PhotoComponent,
     InfoWelcomeComponent,
-    SafePipe
+    SafePipe,
+    UserContainerComponent
   ],
   providers: [],
   imports: [
@@ -27,7 +29,7 @@ import {PhotoComponent} from './photo/photo.component';
     UserRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
-  exports: [UserComponent]
+  exports: [UserComponent, UserContainerComponent]
 })
 export class UserModule {
 }
