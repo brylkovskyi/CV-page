@@ -202,7 +202,7 @@ export const MyData = {
     groupData: [{description: 'Taras Brylkovskyi', title: 'My name'}, {
       description: '23rd Oct. 1990',
       title: 'D.O.B.'
-    }, {description: 'married', title: 'Marital st.'}, {description: 'no', title: 'Children'}, {
+    }, {description: 'married', title: 'Marital st.'}, {description: 'yes', title: 'Children'}, {
       description: 'UKRAINE, IF',
       title: 'Location'
     }], groupName: 'personal'
