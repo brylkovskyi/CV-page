@@ -1,10 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
-import {delay, mapTo, switchMap, takeUntil} from 'rxjs/operators';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {delay, mapTo, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {merge, of, Subject} from 'rxjs';
-import {UserData} from '../../assets/user-mock';
-import {AuthService} from '../auth.service';
+import {LoadingService} from '../loading.service';
 
 @Component({
   selector: 'app-admin',
@@ -13,12 +12,10 @@ import {AuthService} from '../auth.service';
 })
 export class AdminComponent implements OnInit, OnDestroy {
 
-  constructor(private dataService: DataService,
-              private route: ActivatedRoute,
-              private authService: AuthService,
-              private router: Router) {
+  constructor(private dataService: DataService, private route: ActivatedRoute, private loadingService: LoadingService) {
   }
 
+  loading = this.loadingService.loadingSetter;
   userId;
   userData;
   unsubscribe = new Subject();
@@ -31,7 +28,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   removeActiveField() {
     this.dataService.activeField.next(null);
-
   }
 
   setActiveField(event) {
@@ -60,10 +56,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   saveEditedData() {
-    this.dataService.updateUser(this.userId, this.userData).pipe(
-      takeUntil(this.unsubscribe)
-    )
-      .subscribe(
+    this.dataService.updateUser(this.userId, this.userData).then(
       () => {
         this.updateConfirm = 'Updated';
         this.timerFunction();
@@ -76,27 +69,17 @@ export class AdminComponent implements OnInit, OnDestroy {
     );
   }
 
-  getUserdata(userId) {
-    this.userId = userId;
-    return this.dataService.getUserdata(userId);
-  }
-
-  signOut() {
-    this.authService.signOut();
-    this.router.navigate(['login']);
-  }
-
-  ngOnInit() {
+  ngOnInit(): void {
+    this.loading(true);
     this.route.paramMap.pipe(
-      switchMap((data: ParamMap) => this.getUserdata(data.get('id'))),
+      tap((routeData: ParamMap) => this.userId = routeData.get('id')),
+      switchMap(() => this.dataService.getUserData(this.userId)),
+      switchMap(user => user ? of(user) : this.dataService.createUser(this.userId)),
       takeUntil(this.unsubscribe)
     )
       .subscribe(data => {
-        if (data) {
-          this.userData = data;
-        } else {
-          this.dataService.createUser(UserData, this.userId);
-        }
+        this.userData = data;
+        this.loading(false);
       });
   }
 
@@ -104,4 +87,5 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
+
 }

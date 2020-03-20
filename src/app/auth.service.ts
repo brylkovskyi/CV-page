@@ -1,14 +1,14 @@
 import {Injectable, NgZone} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
-import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
+
 import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  provider = new GoogleAuthProvider();
+  provider = new firebase.auth.GoogleAuthProvider();
   authStatus = new Subject <firebase.User | null>();
 
   constructor(private auth: AngularFireAuth, private zone: NgZone) {
@@ -17,7 +17,6 @@ export class AuthService {
   authStatusChecker() {
     this.auth.auth.onAuthStateChanged(
       user => {
-        // console.log(user);
         this.zone.run(() => this.authStatus.next(user));
       },
       err => {
@@ -31,7 +30,6 @@ export class AuthService {
 
   signIn() {
     this.auth.auth.signInWithPopup(this.provider);
-      // .then((data) => console.log(data));
   }
 
   signOut() {

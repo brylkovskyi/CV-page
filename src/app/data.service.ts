@@ -1,65 +1,50 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {switchMap} from 'rxjs/operators';
-import {Subject, of} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+import {Subject, throwError, of, Observable} from 'rxjs';
+import {UserData} from '../assets/user-mock';
+import {User} from './shared/user-interface';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-
-  constructor(private db: AngularFirestore) {
+  constructor(private db: AngularFirestore, private authService: AuthService) {
   }
 
-  activeField = new Subject();
-  usersList;
+  activeField: Subject<string> = new Subject();
 
-  getUserdata(userId) {
-    const userFromList = (data) => {
-      this.usersList = data.payload.data();
-      let user = null;
-      Object.keys(data.payload.data()).forEach(key => {
-        if (key === userId) {
-          user = data.payload.data()[key];
-        }
-      });
-      if (user) {
-        return this.db.doc('users/' + user).valueChanges();
-      } else {
-        return of(false);
-      }
-    };
-
-    return this.getUsersList().pipe(
-      switchMap(list => userFromList(list)));
+  getUserData(userId): Observable<User> {
+    return this.db.doc('users/' + userId).snapshotChanges().pipe(
+      map(snapshot => snapshot.payload.data() as User)
+    );
   }
 
-  getUsersList() {
-    return this.db.doc('users/userslist').snapshotChanges();
+  checkUserRights(userIdFromRoute) {
+    return this.authService.authStatusChecker().pipe(
+      switchMap(user => of(user.uid === userIdFromRoute))
+    );
   }
 
-  createUser(user, userId) {
-    this.db.collection('users').add(user).then(data => {
-      this.usersList[userId] = data.id;
-      this.addToUserList(this.usersList).then(() => console.log('new entry'));
-    });
-  }
+  createUser(userId): Observable<User> {
+    UserData.id = userId;
 
-  addToUserList(userList) {
-    return this.db.doc('users/userslist').update(userList);
+    return this.checkUserRights(userId).pipe(
+      switchMap(isAble => isAble ?
+        this.db.collection('users').doc(userId).set(UserData) :
+        throwError('You don\'t have right\'s to edit this profile.')),
+      map(() => UserData as User)
+    );
   }
 
   updateUser(userId, userData) {
-    return this.getUsersList().pipe(
-      switchMap(usersList =>
-        this.db.doc('users/' + usersList.payload.data()[userId]).update(userData)
-      ));
+    return this.db.doc('users/' + userId).update(userData);
   }
 
   deleteUser(userId: string) {
     this.db.doc('users/' + userId).delete();
   }
-
 
 }
 

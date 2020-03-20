@@ -3,6 +3,7 @@ import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase/app';
 import {LoadingService} from '../loading.service';
+import {DataService} from '../data.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private loadingService: LoadingService) {}
+              private dataService: DataService,
+              private loadingService: LoadingService) {
+  }
 
   user: firebase.User | null;
 
@@ -27,7 +30,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  signIn() {
+  signInOAuth() {
     this.authService.signIn();
   }
 

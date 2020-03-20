@@ -1,11 +1,10 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
-import {AuthService} from '../auth.service';
-import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {DisplayWidth} from '../shared/display.class';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {LoadingService} from '../loading.service';
+import {User} from '../shared/user-interface';
 
 @Component({
   selector: 'app-user',
@@ -13,91 +12,31 @@ import {LoadingService} from '../loading.service';
   styleUrls: ['./user.component.scss']
 })
 
-export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
-  tab;
+export class UserComponent implements OnInit, OnDestroy {
   unsubscribe = new Subject();
-  layout;
-  userData;
-  active = this.dataService.activeField;
+  userData: User;
   loading = this.loadingService.loadingSetter;
-
-
 
   constructor(
     private dataService: DataService,
     private changeDetector: ChangeDetectorRef,
-    public authService: AuthService,
     private route: ActivatedRoute,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private router: Router
   ) {
-    super();
   }
 
-  @Input() userDataInput;
-  @Input() activeField;
-
-  loadWatcher(tab) {
-    this.tab = tab;
-  }
-
-  scrollTo(name) {
-    this.tab = 'about';
-    this.changeDetector.detectChanges();
-    document.getElementById(name).scrollIntoView({behavior: 'smooth', block: 'start'});
-  }
-
-  socialRecognizer(link) {
-    link.toLowerCase();
-    const className = 'fab fa-';
-    const facebook = /facebook.com/;
-    const twitter = /twitter.com/;
-    const linkedin = /linkedin.com/;
-    let reserved = null;
-
-    if (facebook.test(link) && !reserved) {
-      reserved = true;
-      return className + 'facebook';
-    }
-    if (twitter.test(link) && !reserved) {
-      reserved = true;
-      return className + 'twitter';
-    }
-    if (linkedin.test(link) && !reserved) {
-      reserved = true;
-      return className + 'linkedin';
-    }
-    if (!reserved) {
-      return 'fas fa-link';
-    }
-  }
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.loading(true);
     this.route.paramMap.pipe(
-      switchMap((data: ParamMap) => this.dataService.getUserdata(data.get('id'))),
+      switchMap((routeData: ParamMap) => this.dataService.getUserData(routeData.get('id'))),
       takeUntil(this.unsubscribe)
     )
-      .subscribe(data => {
-        this.loading(false);
-        if (data) {
-          if (this.userDataInput) {
-            this.userData = this.userDataInput;
-            this.unsubscribe.next();
-            this.unsubscribe.complete();
-          } else {
-            this.userData = data;
-          }
+      .subscribe((serverUserData: User) => {
+          this.loading(false);
+          serverUserData ? this.userData = serverUserData : this.router.navigate(['/404']);
         }
-      });
-
-    this.desctopView.pipe(
-      takeUntil(this.unsubscribe),
-      debounceTime(300)
-    )
-      .subscribe(data => {
-        this.layout = data;
-      });
-    this.tab = 'welcome';
+      );
   }
 
   ngOnDestroy(): void {

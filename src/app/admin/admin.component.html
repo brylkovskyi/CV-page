@@ -1,8 +1,7 @@
 <div class="container">
     <div *ngIf="userData" class="editing-panel">
         <ng-scrollbar shown='hover' class='my-scrollbar'>
-            <div
-                 class="fieldGroup">
+            <div class="fieldGroup">
                 <span>Header (name)</span>
                 <input [(ngModel)]="userData.name">
             </div>
@@ -16,7 +15,7 @@
             </div>
             <div *ngFor="let userField of userData.data; index as i">
                 <span class="field-title">{{userField.groupName | titlecase}}</span>
-                <div *ngIf="userField.groupData">
+                <div *ngIf="userField.groupData[0].title">
                     <div *ngFor="let row of userField.groupData; index as y">
                         <div (mouseover)="setActiveField($event)" (mouseleave)="removeActiveField()"
                              class="fieldGroup active-{{userData.data[i].groupData[y].title}}" *ngIf="userField.groupName !== 'social'">
@@ -34,14 +33,14 @@
                         <div (mouseover)="setActiveField($event)" (mouseleave)="removeActiveField()" class="fieldGroup active-{{row.link}}"
                              *ngIf="userField.groupName === 'social'">
                             <span>Name</span>
-                            <input (input)="setActiveField(userData.data[i].groupData[y].name)" [(ngModel)]="userData.data[i].groupData[y].name"><br/>
+                            <input (input)="setActiveField(userData.data[i].groupData[y].title)" [(ngModel)]="userData.data[i].groupData[y].title"><br/>
                             <span>Link</span>
                             <input (input)="setActiveField(userData.data[i].groupData[y].link)" [(ngModel)]="userData.data[i].groupData[y].link"/>
                         </div>
                     </div>
                 </div>
-                <div *ngIf="!userField.groupData">
-                    <textarea [name]="userField.groupName" (change)="setFieldData($event.target, i)">{{userData.data[i].copy}}
+                <div *ngIf="!userField.groupData[0].title">
+                    <textarea [name]="userField.groupName" (change)="setFieldData($event.target, i)">{{userData.data[i].groupData}}
                     </textarea>
                 </div>
             </div>
@@ -52,8 +51,7 @@
         </ng-scrollbar>
     </div>
     <div class="preview-panel">
-        <app-user [userDataInput]="userData"></app-user>
+        <app-user-container [inputUserData]="userData"></app-user-container>
     </div>
-    <button (click)="signOut()" class="logout">LOG OUT</button>
 </div>
 
