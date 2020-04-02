@@ -60,7 +60,7 @@ export const UserData = {
       ]
     },
     {
-      groupName: 'Welcome',
+      groupName: 'welcome',
       groupData: `Hello!<br/><br/>
 Right part of your CV can be edited both as regular text and HTML script.
  You are able to include css styles to make your copy attractive.
@@ -72,14 +72,14 @@ Best regards,<br/>
 John`
     },
     {
-      groupName: 'About me',
+      groupName: 'about me',
       groupData: `Success and results-driven, and bla bla bla...
 <br/>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
  Aliquam commodi et ipsum officia officiis reprehenderit sequi, voluptatum. Ab autem eaque,
  enim eum iure nisi, non officia, qui rem rerum soluta!`
     },
     {
-      groupName: 'Skills',
+      groupName: 'skills',
       groupData: `
 <div style="display: flex; ">
 <div style="display: flex; flex-flow: column; width: 50%; flex-wrap: wrap">
@@ -124,7 +124,7 @@ John`
 </div>`
     },
     {
-      groupName: 'Experience',
+      groupName: 'experience',
       groupData: `
 <div style="position: relative">
 <div style="display: flex;">
@@ -157,7 +157,7 @@ Ghost hunting and elimination <br/>
 `
     },
     {
-      groupName: 'Education',
+      groupName: 'education',
       groupData: `
 <div style="position: relative">
 <div style="display: flex;">
@@ -186,7 +186,7 @@ Ghost hunting and elimination <br/>
 `
     },
     {
-      groupName: 'Interests',
+      groupName: 'interests',
       groupData: `
 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
  Adipisci cumque eaque maxime, minima molestias nemo quia recusandae ut velit veritatis!<br/><br/>
