@@ -23,7 +23,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   timer;
 
   setFieldData(target, i) {
-    this.userData.data[i].copy = target.value;
+    this.userData.data[i].groupData = target.value;
   }
 
   removeActiveField() {
