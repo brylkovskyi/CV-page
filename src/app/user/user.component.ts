@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../data.service';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -19,7 +19,6 @@ export class UserComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataService: DataService,
-    private changeDetector: ChangeDetectorRef,
     private route: ActivatedRoute,
     private loadingService: LoadingService,
     private router: Router

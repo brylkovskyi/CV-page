@@ -1,0 +1,12 @@
+<table>
+    <thead>
+        <tr>
+            <td colspan="3">{{title}}</td>
+        </tr>
+    </thead>
+    <tr #tablerow *ngFor="let row of data.groupData; index as i" >
+      <td [ngClass]="{'active': (row.title | lowercase) === (active | async | lowercase)}"></td>
+        <td class="first" >{{row.title}}</td>
+      <td class="second">{{row.description}}</td>
+    </tr>
+</table>

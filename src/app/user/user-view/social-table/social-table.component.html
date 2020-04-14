@@ -1,0 +1,7 @@
+<div class="social">
+      <span *ngFor="let entry of data.groupData"
+            [ngClass]="{'active': (entry.link | lowercase) === (active | async | lowercase)}">
+        <i class="fab" [className]=socialRecognizer(entry.link)></i>
+        <a [href]=entry.link target="_blank">{{entry.title}}</a>
+      </span>
+</div>

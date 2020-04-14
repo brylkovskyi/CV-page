@@ -1,129 +1,162 @@
+@keyframes blink {
+    0% {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+    }
+    50% {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+    }
+}
+
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: row;
-  height: 100%;
-  width: 100%;
-
-  .logout {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background-color: #ffffff;
-    color: #363636;
-    font-weight: 500;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    padding: 5px;
-    opacity: 0.4;
-    transition: opacity 0.3s;
-  }
-
-  .logout:hover {
-    opacity: 1;
-  }
-
-  .my-scrollbar {
-    --scrollbar-padding: 8px 0 8px 10px;
-    //--scrollbar-color: transparent;
-    //--scrollbar-container-color: transparent;
-    //--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
-    //--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
-    //--scrollbar-border-radius: 4px;
-    //--scrollbar-size: 6px;
-    //--scroll-view-margin: 0;
-    //--scroll-view-color: transparent;
-  }
-
-  .editing-panel {
-    background-color: #e5e6e8;
-    width: 400px;
-    height: 876px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    z-index: 2;
-    padding: 20px;
-    color: #363636;
 
-    span {
-      display: inline-block;
-      width: 100px;
-    }
-
-    input {
-      background-color: #f9f9fa;
-      border: 1px solid #8c8c8c;
-      padding: 0 2px;
-    }
-
-    .field-title {
-      display: inline-block;
-      margin-top: 20px;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    .fieldGroup {
-      margin: 10px 20px;
-
-      div:nth-child(2) {
-        margin-top: 5px;
-      }
-    }
-
-    textarea {
-      background-color: #f9f9fa;
-      width: 340px;
-      height: 200px;
-      margin-top: 5px;
-      resize: none;
-    }
-
-    /* width */
-    ::-webkit-scrollbar {
-      width: 5px;
-      border-radius: 3px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: #e5e6e8;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background: #b7b8ba;
-    }
-
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-      background: #a0a1a2;
-    }
-
-
-    .confirm {
-      margin-top: 10px;
-
-      button {
-        background-color: #363636;
-        color: #ffffff;
-        border: none;
-        padding: 5px;
-        text-transform: uppercase;
-        cursor: pointer;
-      }
-
-      span {
+    .logout {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background-color: #ffffff;
         color: #363636;
-        margin-left: 5px;
-        font-size: 12px;
-      }
-
+        font-weight: 500;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        padding: 5px;
+        opacity: 0.4;
+        transition: opacity 0.3s;
     }
-  }
+
+    .logout:hover {
+        opacity: 1;
+    }
+
+    .my-scrollbar {
+        height: 758px;
+        --scrollbar-padding: 8px 0 8px 10px;
+        background-color: #e5e6e8;
+        width: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        z-index: 2;
+        padding: 20px;
+        padding-top: 0;
+        margin-right: 20px;
+        color: #363636;
+    }
+
+    h3 {
+        text-transform: uppercase;
+        font-weight: 500;
+        padding: 20px;
+        color: white;
+        background-color: #363636;
+        text-align: center;
+        margin-right: 20px;
+    }
+
+    .editing-panel {
+        span {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input {
+            background-color: #f9f9fa;
+            border: 1px solid #8c8c8c;
+            padding: 0 2px;
+            width: 225px;
+        }
+
+        .field-title {
+            display: inline-block;
+            margin-top: 20px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .fieldGroup {
+            margin: 10px;
+
+            div:nth-child(2) {
+                margin-top: 5px;
+            }
+        }
+
+        textarea {
+            background-color: #f9f9fa;
+            width: 340px;
+            height: 200px;
+            margin-top: 5px;
+            resize: none;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+            border-radius: 3px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #e5e6e8;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            background: #b7b8ba;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0a1a2;
+        }
+
+
+        .confirm {
+            margin-top: 10px;
+
+            button {
+                background-color: #363636;
+                width: 105px;
+                height: 30px;
+                color: #ffffff;
+                border: none;
+                padding: 5px;
+                margin: 10px;
+                text-transform: uppercase;
+                cursor: pointer;
+                position: relative;
+                line-height: 10px;
+            }
+
+            button::after {
+                content: '';
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                position: absolute;
+                left: 0;
+                top: 0;
+
+            }
+
+            button.highlight::after {
+                content: '';
+                opacity: 1;
+                animation: blink 2.0s linear 5;
+            }
+
+            span {
+                color: #363636;
+                margin-left: 5px;
+                font-size: 12px;
+            }
+
+        }
+    }
 }

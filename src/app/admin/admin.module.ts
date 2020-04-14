@@ -7,14 +7,14 @@ import {FormsModule} from '@angular/forms';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 
 @NgModule({
-  declarations: [AdminComponent],
-  imports: [
-    CommonModule,
-    AdminRoutingModule,
-    UserModule,
-    FormsModule,
-    NgScrollbarModule
-  ]
+    declarations: [AdminComponent],
+    imports: [
+        CommonModule,
+        AdminRoutingModule,
+        UserModule,
+        FormsModule,
+        NgScrollbarModule
+    ]
 })
 export class AdminModule {
 }

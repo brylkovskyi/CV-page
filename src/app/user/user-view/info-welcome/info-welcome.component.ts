@@ -1,5 +1,5 @@
 import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
-import {DisplayWidth} from '../../shared/display.class';
+import {DisplayWidth} from '../../../shared/display.class';
 
 @Component({
   selector: 'app-info-welcome',

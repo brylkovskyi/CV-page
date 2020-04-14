@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {UnknownPageComponent} from './unknown-page/unknown-page.component';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './auth.guard';

@@ -1,0 +1,39 @@
+<div *ngIf="inputUserData" class="container">
+
+  <aside class="aside">
+    <app-photo class="photo" [photo]="inputUserData?.photoURL"></app-photo>
+    <app-aside-table [data]="filterField(inputUserData.data, 'personal')"></app-aside-table>
+    <app-aside-table [data]="filterField(inputUserData.data, 'contacts')"></app-aside-table>
+    <ul>
+      <li (click)="scrollTo('about me')">ABOUT ME</li>
+      <li (click)="scrollTo('skills')">SKILLS</li>
+      <li (click)="scrollTo('experience')">EXPERIENCE</li>
+      <li (click)="scrollTo('education')">EDUCATION</li>
+      <li (click)="scrollTo('interests')">INTERESTS</li>
+    </ul>
+    <app-social-table [data]="filterField(inputUserData.data,'social')" ></app-social-table>
+  </aside>
+
+  <main>
+    <header class="title">
+      <h1 (click)="tab='welcome';" [ngClass]="{'no-welcome': tab !== 'welcome'}">{{inputUserData.name}}</h1>
+      <h2>{{inputUserData.profession}}</h2>
+    </header>
+    <section class="info" [ngClass]="{'about': tab!=='welcome'}">
+      <ng-scrollbar shown='hover' class='my-scrollbar'>
+        <app-info-welcome *ngIf="tab === 'welcome'; else information" (load)="loadWatcher('about')"
+                          [data]="filterField(inputUserData.data, 'welcome')"></app-info-welcome>
+        <ng-template #information>
+          <app-info-about id="about me" [data]="filterField(inputUserData.data,'about me')"></app-info-about>
+          <app-info-about id="skills" [data]="filterField(inputUserData.data,'skills')"></app-info-about>
+          <app-info-about id="experience" [data]="filterField(inputUserData.data,'experience')"></app-info-about>
+          <app-info-about id="education" [data]="filterField(inputUserData.data,'education')"></app-info-about>
+          <app-info-about id="interests" [data]="filterField(inputUserData.data,'interests')"></app-info-about>
+        </ng-template>
+      </ng-scrollbar>
+    </section>
+  </main>
+
+  <button (click)="navigateHome()" class="home">HOME</button>
+
+</div>

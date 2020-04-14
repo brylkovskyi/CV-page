@@ -1,6 +1,11 @@
-.container {
-  height: 100vh;
+.main {
+  min-height: 100vh;
   background-image: url(/assets/bg-image.jpg);
   background-position: center;
   background-size: cover;
+  padding: 50px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
 }

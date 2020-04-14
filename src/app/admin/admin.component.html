@@ -1,6 +1,7 @@
 <div class="container">
-    <div *ngIf="userData" class="editing-panel">
-        <ng-scrollbar shown='hover' class='my-scrollbar'>
+    <div *ngIf="userData">
+        <h3>User information</h3>
+        <ng-scrollbar shown='hover' class='my-scrollbar editing-panel'>
             <div class="fieldGroup">
                 <span>Header (name)</span>
                 <input [(ngModel)]="userData.name">
@@ -18,7 +19,8 @@
                 <div *ngIf="userField.groupData[0].title">
                     <div *ngFor="let row of userField.groupData; index as y">
                         <div (mouseover)="setActiveField($event)" (mouseleave)="removeActiveField()"
-                             class="fieldGroup active-{{userData.data[i].groupData[y].title}}" *ngIf="userField.groupName !== 'social'">
+                             class="fieldGroup active-{{userData.data[i].groupData[y].title}}"
+                             *ngIf="userField.groupName !== 'social'">
                             <div>
                                 <span>Title</span>
                                 <input (input)="setActiveField(userData.data[i].groupData[y].title)"
@@ -30,28 +32,32 @@
                                        [(ngModel)]="userData.data[i].groupData[y].description"/>
                             </div>
                         </div>
-                        <div (mouseover)="setActiveField($event)" (mouseleave)="removeActiveField()" class="fieldGroup active-{{row.link}}"
+                        <div (mouseover)="setActiveField($event)" (mouseleave)="removeActiveField()"
+                             class="fieldGroup active-{{row.link}}"
                              *ngIf="userField.groupName === 'social'">
                             <span>Name</span>
-                            <input (input)="setActiveField(userData.data[i].groupData[y].title)" [(ngModel)]="userData.data[i].groupData[y].title"><br/>
+                            <input (input)="setActiveField(userData.data[i].groupData[y].title)"
+                                   [(ngModel)]="userData.data[i].groupData[y].title"><br/>
                             <span>Link</span>
-                            <input (input)="setActiveField(userData.data[i].groupData[y].link)" [(ngModel)]="userData.data[i].groupData[y].link"/>
+                            <input (input)="setActiveField(userData.data[i].groupData[y].link)"
+                                   [(ngModel)]="userData.data[i].groupData[y].link"/>
                         </div>
                     </div>
                 </div>
                 <div *ngIf="!userField.groupData[0].title">
-                    <textarea [name]="userField.groupName" (change)="setFieldData($event.target, i)">{{userData.data[i].groupData}}
+                    <textarea [name]="userField.groupName"
+                              (change)="setFieldData($event.target, i)">{{userData.data[i].groupData}}
                     </textarea>
                 </div>
             </div>
             <div class="confirm">
-                <button (click)="saveEditedData()">Save Changes</button>
+                <button (click)="saveEditedData()" #saveButton>Save Changes</button>
                 <span *ngIf="timer|async">{{updateConfirm}}</span>
             </div>
         </ng-scrollbar>
     </div>
     <div class="preview-panel">
-        <app-user-container [inputUserData]="userData"></app-user-container>
+        <app-user-view [inputUserData]="userData"></app-user-view>
     </div>
 </div>
 
