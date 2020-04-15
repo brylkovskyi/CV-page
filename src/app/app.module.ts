@@ -10,6 +10,7 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {UnknownPageComponent} from './unknown-page/unknown-page.component';
 import {SpinnerComponent} from './spinner/spinner.component';
 import { ModalWindowComponent } from './modal-window/modal-window.component';
+import {SharedModule} from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ModalWindowComponent } from './modal-window/modal-window.component';
     BrowserModule,
     AppRoutingModule,
     AngularFireAuthModule,
+    SharedModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule
   ],

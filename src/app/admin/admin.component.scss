@@ -1,12 +1,12 @@
 @keyframes blink {
     0% {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+        box-shadow: none;
     }
     50% {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 1);
     }
     100% {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+        box-shadow: none;
     }
 }
 
@@ -148,7 +148,7 @@
             button.highlight::after {
                 content: '';
                 opacity: 1;
-                animation: blink 2.0s linear 5;
+                animation: blink 2.0s linear 3;
             }
 
             span {

@@ -8,10 +8,10 @@ import {UserRoutingModule} from './user-routing.module';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../../environments/environment';
-import {SafePipe} from './safe.pipe';
 import {PhotoComponent} from './user-view/photo/photo.component';
 import {UserViewComponent} from './user-view/user-view.component';
 import {SocialTableComponent} from './user-view/social-table/social-table.component';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -20,7 +20,6 @@ import {SocialTableComponent} from './user-view/social-table/social-table.compon
         InfoAboutComponent,
         PhotoComponent,
         InfoWelcomeComponent,
-        SafePipe,
         UserViewComponent,
         SocialTableComponent
     ],
@@ -28,6 +27,7 @@ import {SocialTableComponent} from './user-view/social-table/social-table.compon
     imports: [
         NgScrollbarModule,
         CommonModule,
+        SharedModule,
         UserRoutingModule,
         AngularFireModule.initializeApp(environment.firebaseConfig)
     ],

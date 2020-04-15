@@ -1,15 +1,13 @@
-<div class="wrapper" *ngIf="modalService.modalToggler |async">
+<div class="wrapper" [ngClass]="{'show': modalService.modalToggler |async}">
     <div *ngIf="modalService.modalData" class="container">
         <h3>
             {{modalService.modalData.heading}}
         </h3>
-        <p>
-            {{modalService.modalData.message}}
-        </p>
+        <p [innerHTML]="modalService.modalData.message | safe"></p>
         <div>
-            <button (click)="modalService.modalClose('review')">{{modalService.modalData.btnFirst}}</button>
-            <button (click)="modalService.modalClose('save')">{{modalService.modalData.btnSecond}}</button>
-            <button (click)="modalService.modalClose('discard')">{{modalService.modalData.btnThird}}</button>
+            <button (click)="modalService.modalClose('first')">{{modalService.modalData.btnFirst}}</button>
+            <button (click)="modalService.modalClose('second')">{{modalService.modalData.btnSecond}}</button>
+            <button (click)="modalService.modalClose('third')">{{modalService.modalData.btnThird}}</button>
         </div>
     </div>
 </div>

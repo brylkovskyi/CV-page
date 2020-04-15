@@ -45,9 +45,9 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.modifiedUserData = JSON.stringify(this.userData);
         if (this.modifiedUserData !== this.initUserData) {
             const modalData: ModalData = {
-                heading: 'Window close attempt',
-                message: 'You are trying to close window with unsaved edits.' +
-                    ' Please review changes or instantly save all data. If changes are not important simply discard them.',
+                heading: 'You are leaving webpage',
+                message: 'Unsaved changes will be lost. You may <i>review</i> your edits or instantly <i>save</i> them.' +
+                    ' If changes are not important click <i>discard</i>.',
                 btnFirst: 'Review',
                 btnSecond: 'Save',
                 btnThird: 'Discard'
@@ -55,13 +55,13 @@ export class AdminComponent implements OnInit, OnDestroy {
             return this.modalService.openModal(modalData).pipe(
                 map(result => {
                     switch (result) {
-                        case 'review':
+                        case 'first':
                             this.highlightSaveButton();
                             return false;
-                        case 'save':
+                        case 'second':
                             this.saveEditedData();
                             return true;
-                        case 'discard':
+                        case 'third':
                             return true;
                         default:
                             return true;
