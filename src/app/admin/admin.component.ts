@@ -2,9 +2,10 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import {DataService} from '../data.service';
 import {delay, mapTo, switchMap, takeUntil, tap, map} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {BehaviorSubject, fromEvent, merge, of, Subject} from 'rxjs';
+import {fromEvent, merge, of, Subject} from 'rxjs';
 import {LoadingService} from '../loading.service';
-import {User} from '../shared/user-interface';
+import {ModalWindowService} from '../modal-window/modal-window.service';
+import {ModalData} from '../shared/modal-window-interface';
 
 @Component({
     selector: 'app-admin',
@@ -17,25 +18,60 @@ export class AdminComponent implements OnInit, OnDestroy {
         private dataService: DataService,
         private route: ActivatedRoute,
         private loadingService: LoadingService,
-        private router: Router) {
+        private router: Router,
+        private modalService: ModalWindowService) {
     }
 
     @ViewChild('saveButton', {static: false}) saveButtonRef: ElementRef;
     loading = this.loadingService.loadingSetter;
     userId;
-    userData: User;
+    userData;
+    modifiedUserData: string;
     initUserData: string;
     unsubscribe = new Subject();
     updateConfirm = null;
     timer;
-    isUserDataChanged: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    preventUnsavedData = merge(fromEvent(window, 'beforeunload'), this.router.events);
+    preventUnsavedData = fromEvent(window, 'beforeunload');
+
+    highlightSaveButton() {
+        const button = this.saveButtonRef.nativeElement;
+        button.className = 'highlight';
+        setTimeout(() => button.className = '', 10000);
+        button.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+
 
     canDeactivate() {
-        return this.isUserDataChanged.pipe(
-            map(data => !data)
-        );
+        this.modifiedUserData = JSON.stringify(this.userData);
+        if (this.modifiedUserData !== this.initUserData) {
+            const modalData: ModalData = {
+                heading: 'Window close attempt',
+                message: 'You are trying to close window with unsaved edits.' +
+                    ' Please review changes or instantly save all data. If changes are not important simply discard them.',
+                btnFirst: 'Review',
+                btnSecond: 'Save',
+                btnThird: 'Discard'
+            };
+            return this.modalService.openModal(modalData).pipe(
+                map(result => {
+                    switch (result) {
+                        case 'review':
+                            this.highlightSaveButton();
+                            return false;
+                        case 'save':
+                            this.saveEditedData();
+                            return true;
+                        case 'discard':
+                            return true;
+                        default:
+                            return true;
+                    }
+                }));
+        } else {
+            return true;
+        }
     }
+
 
     setFieldData(target, i) {
         this.userData.data[i].groupData = target.value;
@@ -90,32 +126,28 @@ export class AdminComponent implements OnInit, OnDestroy {
             tap((routeData: ParamMap) => this.userId = routeData.get('id')),
             switchMap(() => this.dataService.getUserData(this.userId)),
             switchMap(user => user ? of(user) : this.dataService.createUser(this.userId)),
-            takeUntil(this.unsubscribe),
             tap(data => {
                 this.userData = data;
                 this.initUserData = JSON.stringify(data);
                 this.loading(false);
             }),
-            switchMap(() => this.preventUnsavedData))
+            switchMap(() => this.preventUnsavedData),
+            takeUntil(this.unsubscribe))
             .subscribe((event: any) => {
-                const highlightSaveButton = () => {
-                    const button = this.saveButtonRef.nativeElement;
-                    button.className = 'highlight';
-                    setTimeout(() => button.className = '', 10000);
-                    button.scrollIntoView({behavior: 'smooth', block: 'start'});
-
-                };
-                const modified = JSON.stringify(this.userData);
-                if (this.initUserData !== modified) {
-                    highlightSaveButton();
-                    event instanceof BeforeUnloadEvent ? event.returnValue = false : this.isUserDataChanged.next(true);
-                } else {
-                    this.isUserDataChanged.next(false);
+                this.modifiedUserData = JSON.stringify(this.userData);
+                if (this.initUserData !== this.modifiedUserData) {
+                    if (event instanceof BeforeUnloadEvent) {
+                        event.returnValue = false;
+                        this.highlightSaveButton();
+                    }
                 }
             });
     }
 
     ngOnDestroy(): void {
+        this.userData = null;
+        this.modifiedUserData = null;
+        this.initUserData = null;
         this.unsubscribe.next();
         this.unsubscribe.complete();
     }

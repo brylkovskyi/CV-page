@@ -1,0 +1,54 @@
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  .container {
+    width: 66%;
+    max-width: 500px;
+
+    h3 {
+      background-color: #363636;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    p {
+      background-color: white;
+      color: #363636;
+      text-align: center;
+      padding: 20px;
+    }
+    div {
+      display: flex;
+      flex-flow: row;
+      flex-wrap: wrap;
+      background-color: white;
+      justify-content: center;
+
+
+      button {
+        background-color: #363636;
+        color: white;
+        min-width: 100px;
+        padding: 10px;
+        margin: 0 5px 10px;
+        outline: none;
+        border: none;
+        font-size: 15px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+
+
+

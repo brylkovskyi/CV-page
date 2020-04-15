@@ -9,13 +9,15 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {UnknownPageComponent} from './unknown-page/unknown-page.component';
 import {SpinnerComponent} from './spinner/spinner.component';
+import { ModalWindowComponent } from './modal-window/modal-window.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     UnknownPageComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ModalWindowComponent
   ],
   imports: [
     BrowserModule,

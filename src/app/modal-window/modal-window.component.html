@@ -1,0 +1,15 @@
+<div class="wrapper" *ngIf="modalService.modalToggler |async">
+    <div *ngIf="modalService.modalData" class="container">
+        <h3>
+            {{modalService.modalData.heading}}
+        </h3>
+        <p>
+            {{modalService.modalData.message}}
+        </p>
+        <div>
+            <button (click)="modalService.modalClose('review')">{{modalService.modalData.btnFirst}}</button>
+            <button (click)="modalService.modalClose('save')">{{modalService.modalData.btnSecond}}</button>
+            <button (click)="modalService.modalClose('discard')">{{modalService.modalData.btnThird}}</button>
+        </div>
+    </div>
+</div>

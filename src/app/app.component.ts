@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {LoadingService} from './loading.service';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import {GuardsCheckEnd, GuardsCheckStart, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -14,11 +14,15 @@ export class AppComponent {
     constructor(private loadingService: LoadingService,
                 private router: Router) {
         this.router.events.subscribe(event => {
-            if (event instanceof NavigationStart) {
+            if (event instanceof NavigationStart ||
+                event instanceof GuardsCheckEnd) {
                 this.loading(true);
             }
 
-            if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+            if (event instanceof NavigationEnd ||
+                event instanceof NavigationCancel ||
+                event instanceof NavigationError ||
+                event instanceof GuardsCheckStart) {
                 this.loading(false);
             }
         });
