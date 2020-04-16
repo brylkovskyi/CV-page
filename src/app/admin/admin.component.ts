@@ -2,17 +2,18 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import {DataService} from '../data.service';
 import {delay, mapTo, switchMap, takeUntil, tap, map} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {fromEvent, merge, of, Subject} from 'rxjs';
+import {fromEvent, merge, of, Subject, timer} from 'rxjs';
 import {LoadingService} from '../loading.service';
 import {ModalWindowService} from '../modal-window/modal-window.service';
 import {ModalData} from '../shared/modal-window-interface';
+import {DisplayWidth} from '../shared/display.class';
 
 @Component({
     selector: 'app-admin',
     templateUrl: './admin.component.html',
     styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit, OnDestroy {
+export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy {
 
     constructor(
         private dataService: DataService,
@@ -20,6 +21,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService,
         private router: Router,
         private modalService: ModalWindowService) {
+        super();
     }
 
     @ViewChild('saveButton', {static: false}) saveButtonRef: ElementRef;
@@ -40,17 +42,26 @@ export class AdminComponent implements OnInit, OnDestroy {
         button.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
 
+    leavePageHandler() {
+        fromEvent(window, 'unload').pipe(
+            takeUntil(timer(1500))
+        ).subscribe(
+            () => null, () => null,
+            () => this.highlightSaveButton()
+        );
+    }
 
     canDeactivate() {
         this.modifiedUserData = JSON.stringify(this.userData);
         if (this.modifiedUserData !== this.initUserData) {
             const modalData: ModalData = {
                 heading: 'You are leaving webpage',
-                message: 'Unsaved changes will be lost. You may <i>review</i> your edits or instantly <i>save</i> them.' +
-                    ' If changes are not important click <i>discard</i>.',
-                btnFirst: 'Review',
-                btnSecond: 'Save',
-                btnThird: 'Discard'
+                message: 'Unsaved changes will be lost. You may <i style="font-weight: 500">review</i>' +
+                    ' your edits or instantly <i style="font-weight: 500">save</i> them.' +
+                    ' If changes are not important click <i style="font-weight: 500">discard</i>.',
+                btnFirst: 'Review >',
+                btnSecond: 'Save >',
+                btnThird: 'Discard >'
             };
             return this.modalService.openModal(modalData).pipe(
                 map(result => {
@@ -138,7 +149,7 @@ export class AdminComponent implements OnInit, OnDestroy {
                 if (this.initUserData !== this.modifiedUserData) {
                     if (event instanceof BeforeUnloadEvent) {
                         event.returnValue = false;
-                        this.highlightSaveButton();
+                        this.leavePageHandler();
                     }
                 }
             });

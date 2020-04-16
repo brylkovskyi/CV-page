@@ -4,10 +4,8 @@
             {{modalService.modalData.heading}}
         </h3>
         <p [innerHTML]="modalService.modalData.message | safe"></p>
-        <div>
-            <button (click)="modalService.modalClose('first')">{{modalService.modalData.btnFirst}}</button>
-            <button (click)="modalService.modalClose('second')">{{modalService.modalData.btnSecond}}</button>
-            <button (click)="modalService.modalClose('third')">{{modalService.modalData.btnThird}}</button>
-        </div>
+            <a (click)="modalService.modalClose('first')">{{modalService.modalData.btnFirst}}</a><br/>
+            <a (click)="modalService.modalClose('second')">{{modalService.modalData.btnSecond}}</a><br/>
+            <a (click)="modalService.modalClose('third')">{{modalService.modalData.btnThird}}</a><br/>
     </div>
 </div>

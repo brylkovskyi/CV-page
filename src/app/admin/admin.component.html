@@ -56,7 +56,7 @@
             </div>
         </ng-scrollbar>
     </div>
-    <div class="preview-panel">
+    <div *ngIf="desktopView | async" class="preview-panel">
         <app-user-view [inputUserData]="userData"></app-user-view>
     </div>
 </div>

@@ -3,14 +3,14 @@ import {BehaviorSubject, merge} from 'rxjs';
 import {debounceTime, skip, take} from 'rxjs/operators';
 
 export class DisplayWidth {
-  subject = new BehaviorSubject(+window.innerWidth > 700);
-  desktopView = merge(
+  private subject = new BehaviorSubject(+window.innerWidth > 700);
+  public desktopView = merge(
     this.subject.pipe(take(1)),
     this.subject.pipe(skip(1), debounceTime(300))
   );
 
   @HostListener('window:resize', ['$event.target.innerWidth'])
-  onResize(width) {
+  private onResize(width) {
     this.subject.next(+width > 700);
   }
 }
