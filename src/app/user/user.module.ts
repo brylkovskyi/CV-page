@@ -1,17 +1,18 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {UserComponent} from './user.component';
-import {AsideTableComponent} from './user-view/aside-table/aside-table.component';
-import {InfoAboutComponent} from './user-view/info-about/info-about.component';
-import {InfoWelcomeComponent} from './user-view/info-welcome/info-welcome.component';
+import {AsideTableComponent} from './desctop-view/aside-table/aside-table.component';
+import {InfoAboutComponent} from './desctop-view/info-about/info-about.component';
+import {InfoWelcomeComponent} from './desctop-view/info-welcome/info-welcome.component';
 import {UserRoutingModule} from './user-routing.module';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../../environments/environment';
-import {PhotoComponent} from './user-view/photo/photo.component';
-import {UserViewComponent} from './user-view/user-view.component';
-import {SocialTableComponent} from './user-view/social-table/social-table.component';
+import {PhotoComponent} from './desctop-view/photo/photo.component';
+import {DesctopViewComponent} from './desctop-view/desctop-view.component';
+import {SocialTableComponent} from './desctop-view/social-table/social-table.component';
 import {SharedModule} from '../shared/shared.module';
+import { MobileViewComponent } from './mobile-view/mobile-view.component';
 
 @NgModule({
     declarations: [
@@ -20,8 +21,9 @@ import {SharedModule} from '../shared/shared.module';
         InfoAboutComponent,
         PhotoComponent,
         InfoWelcomeComponent,
-        UserViewComponent,
-        SocialTableComponent
+        DesctopViewComponent,
+        SocialTableComponent,
+        MobileViewComponent
     ],
     providers: [],
     imports: [
@@ -31,7 +33,7 @@ import {SharedModule} from '../shared/shared.module';
         UserRoutingModule,
         AngularFireModule.initializeApp(environment.firebaseConfig)
     ],
-    exports: [UserComponent, UserViewComponent]
+    exports: [UserComponent, DesctopViewComponent, MobileViewComponent]
 })
 export class UserModule {
 }

@@ -1,8 +1,8 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DataService} from '../data.service';
 import {delay, mapTo, switchMap, takeUntil, tap, map} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {fromEvent, merge, of, Subject, timer} from 'rxjs';
+import {fromEvent, merge, of, Subject} from 'rxjs';
 import {LoadingService} from '../loading.service';
 import {ModalWindowService} from '../modal-window/modal-window.service';
 import {ModalData} from '../shared/modal-window-interface';
@@ -13,13 +13,14 @@ import {DisplayWidth} from '../shared/display.class';
     templateUrl: './admin.component.html',
     styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy {
+export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, AfterViewChecked {
 
     constructor(
         private dataService: DataService,
         private route: ActivatedRoute,
         private loadingService: LoadingService,
         private router: Router,
+        private changeDetector: ChangeDetectorRef,
         private modalService: ModalWindowService) {
         super();
     }
@@ -40,15 +41,6 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy {
         button.className = 'highlight';
         setTimeout(() => button.className = '', 10000);
         button.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-
-    leavePageHandler() {
-        fromEvent(window, 'unload').pipe(
-            takeUntil(timer(1500))
-        ).subscribe(
-            () => null, () => null,
-            () => this.highlightSaveButton()
-        );
     }
 
     canDeactivate() {
@@ -149,10 +141,17 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy {
                 if (this.initUserData !== this.modifiedUserData) {
                     if (event instanceof BeforeUnloadEvent) {
                         event.returnValue = false;
-                        this.leavePageHandler();
+
                     }
                 }
             });
+    }
+
+    ngAfterViewChecked() {
+        const divider = document.querySelector('.divider');
+        if (divider && window.innerWidth <= 1200) {
+            divider.remove();
+        }
     }
 
     ngOnDestroy(): void {

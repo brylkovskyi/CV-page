@@ -2,22 +2,20 @@ import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {DisplayWidth} from '../../shared/display.class';
 import {User, UserDataField} from '../../shared/user-interface';
 import {DataService} from '../../data.service';
-import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-user-view',
-  templateUrl: './user-view.component.html',
-  styleUrls: ['./user-view.component.scss']
+  selector: 'app-desctop-view',
+  templateUrl: './desctop-view.component.html',
+  styleUrls: ['./desctop-view.component.scss']
 })
-export class UserViewComponent extends DisplayWidth implements OnInit {
+export class DesctopViewComponent extends DisplayWidth implements OnInit {
 
   tab;
   active = this.dataService.activeField;
 
   constructor(
     private dataService: DataService,
-    private changeDetector: ChangeDetectorRef,
-    private router: Router
+    private changeDetector: ChangeDetectorRef
   ) {
     super();
   }
@@ -32,10 +30,6 @@ export class UserViewComponent extends DisplayWidth implements OnInit {
   filterField(data, fieldName): UserDataField {
     return data.find(item => item.groupName === fieldName);
  }
-
-  navigateHome() {
-    this.router.navigate(['login']);
-  }
 
   scrollTo(name) {
     this.tab = 'about';

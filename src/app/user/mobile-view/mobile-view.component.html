@@ -1,0 +1,58 @@
+<div *ngIf="inputUserData" class="container">
+    <header>
+        <img [src]="inputUserData.photoURL">
+        <div class="title">
+            <h1>
+                {{inputUserData.name}}
+            </h1>
+            <p>
+                {{inputUserData.profession}}
+            </p>
+        </div>
+    </header>
+
+    <nav >
+        <span (click)="scrollTo('welcome')">WELCOME</span>
+        <span>|</span>
+        <span (click)="scrollTo('aboutme')">ABOUT ME</span>
+        <span>|</span>
+        <span (click)="scrollTo('personal')">PERSONAL</span>
+    </nav>
+
+    <main>
+            <div *ngIf="(tab |async)  === 'welcome'" class="welcome">
+                <p [innerHTML]="filterField(inputUserData.data, 'welcome').groupData | safe"></p>
+            </div>
+            <div *ngIf="(tab |async)  === 'aboutme'" class="aboutme">
+                <p [innerHTML]="filterField(inputUserData.data, 'about me').groupData | safe"></p>
+                <p>{{filterField(inputUserData.data, 'skills').groupName | uppercase}}</p>
+                <p [innerHTML]="filterField(inputUserData.data, 'skills').groupData | safe"></p>
+                <p>{{filterField(inputUserData.data, 'experience').groupName | uppercase}}</p>
+                <p [innerHTML]="filterField(inputUserData.data, 'experience').groupData | safe"></p>
+                <p>{{filterField(inputUserData.data, 'education').groupName | uppercase}}</p>
+                <p [innerHTML]="filterField(inputUserData.data, 'education').groupData | safe"></p>
+                <p>{{filterField(inputUserData.data, 'interests').groupName | uppercase}}</p>
+                <p [innerHTML]="filterField(inputUserData.data, 'interests').groupData | safe"></p>
+            </div>
+            <div *ngIf="(tab |async) === 'personal'" class="personal">
+                <table>
+                    <tr *ngFor="let row of filterField(inputUserData.data, 'personal').groupData">
+                        <td>{{row.title}}</td>
+                        <td>{{row.description}}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr *ngFor="let row of filterField(inputUserData.data, 'contacts').groupData">
+                        <td>{{row.title}}</td>
+                        <td>{{row.description}}</td>
+                    </tr>
+                </table>
+            </div>
+    </main>
+
+    <footer #footer [ngClass]="{'stick-bottom': stickBottom}">
+        <span *ngFor="let entry of filterField(inputUserData.data, 'social').groupData">
+        <a [href]=entry.link target="_blank"><i class="fab" [className]=socialRecognizer(entry.link)></i> {{entry.title}}</a>
+      </span>
+    </footer>
+</div>

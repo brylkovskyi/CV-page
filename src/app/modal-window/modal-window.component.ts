@@ -9,7 +9,7 @@ import {ModalWindowService} from './modal-window.service';
 export class ModalWindowComponent implements OnInit {
     modalData;
 
-    constructor(private modalService: ModalWindowService) {
+    constructor(public modalService: ModalWindowService) {
     }
 
     ngOnInit() {

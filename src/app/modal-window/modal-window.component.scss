@@ -40,11 +40,16 @@
 
     a {
       color: #787878;
+      transition: color 0.2s ease-in;
       font-size: 1.2rem;
       line-height: 1;
       cursor: pointer;
       font-weight: 500;
       margin: 10px 15px;
+    }
+
+    a:hover {
+      color: #9b9b9b;
     }
   }
 }

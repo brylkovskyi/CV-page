@@ -1,0 +1,174 @@
+* {
+  color: inherit;
+}
+
+.container {
+  display: flex;
+  min-width: 320px;
+  flex-flow: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fff;
+  position: relative;
+
+  header {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 2rem;
+    background-color: #f9f9f9;
+
+    img {
+      width: 30%;
+      min-width: 100px;
+      border-radius: 50%;
+      max-width: 140px;
+      align-self: center;
+    }
+
+    .title {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: flex-start;
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 0.01rem;
+      padding-left: 1rem;
+
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #363636;
+    padding: 1rem;
+    color: #fff;
+    width: 100%;
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: 0.03rem;
+
+    span {
+      cursor: pointer;
+    }
+  }
+
+  main {
+    background-color: #fff;
+    font-size: 1.4rem;
+    padding: 1rem;
+    width: 100%;
+
+    .welcome {
+    }
+
+    .aboutme {
+
+      p:nth-child(even) {
+        width: 100%;
+        border-bottom: 1px solid #b0b0b0;
+        font-weight: 500;
+        margin: 2rem 0 1rem;
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    .personal {
+      padding-right: 1rem;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-evenly;
+
+      table {
+        margin: 0 auto;
+        padding: 2rem 0;
+        border-collapse: collapse;
+        width: 80%;
+
+        td {
+          border-bottom: 1px solid #363636;
+          padding: 1rem;
+        }
+
+        td:first-child {
+          font-weight: 500;
+          text-transform: capitalize;
+        }
+      }
+      table:nth-child(2) {
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #363636;
+    padding: 1rem;
+    color: #fff;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.03rem;
+    i {
+      font-size: 2rem;
+      vertical-align: middle;
+    }
+
+    a {
+      text-decoration: none;
+      line-height: 2rem;
+      vertical-align: middle;
+    }
+  }
+
+  .stick-bottom {
+    position: absolute;
+    bottom: 0;
+  }
+
+
+}
+
+@media (min-width: 600px) {
+  .container {
+    header {
+      .title {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        p {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    nav {
+      padding: 1rem 30px;
+    }
+  }
+}
+
+@media (orientation: landscape) {
+  footer {
+    position: unset;
+  }
+  //main {
+  //  height: unset;
+  //}
+}
