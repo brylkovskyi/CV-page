@@ -1,129 +1,221 @@
+@keyframes blink {
+  0% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
 .container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-flow: row;
-  height: 100%;
-  width: 100%;
 
-  .logout {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background-color: #ffffff;
-    color: #363636;
-    font-weight: 500;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    padding: 5px;
-    opacity: 0.4;
-    transition: opacity 0.3s;
-  }
-
-  .logout:hover {
-    opacity: 1;
-  }
-
-  .my-scrollbar {
-    --scrollbar-padding: 8px 0 8px 10px;
-    //--scrollbar-color: transparent;
-    //--scrollbar-container-color: transparent;
-    //--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
-    //--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
-    //--scrollbar-border-radius: 4px;
-    //--scrollbar-size: 6px;
-    //--scroll-view-margin: 0;
-    //--scroll-view-color: transparent;
-  }
-
-  .editing-panel {
-    background-color: #e5e6e8;
-    width: 400px;
-    height: 876px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+  .wrapper {
     z-index: 2;
-    padding: 20px;
-    color: #363636;
+    margin-right: 20px;
+    background-color:#e5e6e8;
+    margin-top: 50px;
 
-    span {
-      display: inline-block;
-      width: 100px;
-    }
-
-    input {
-      background-color: #f9f9fa;
-      border: 1px solid #8c8c8c;
-      padding: 0 2px;
-    }
-
-    .field-title {
-      display: inline-block;
-      margin-top: 20px;
+    h3 {
       text-transform: uppercase;
       font-weight: 500;
+      padding: 1.3rem;
+      color: white;
+      background-color: #363636;
+      text-align: center;
+      font-size: 1.4rem;
+      line-height: 1.4rem;
     }
 
-    .fieldGroup {
-      margin: 10px 20px;
+    .editing-panel {
+      height: 768px;
+      --scrollbar-padding: 8px 0 8px 10px;
+      width: 28.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      z-index: 2;
+      padding: 1rem;
+      padding-top: 0;
+      color: #363636;
+      box-shadow: -40px 40px 100px 0px rgba(0, 0, 0, 0.67);
 
-      div:nth-child(2) {
-        margin-top: 5px;
-      }
-    }
-
-    textarea {
-      background-color: #f9f9fa;
-      width: 340px;
-      height: 200px;
-      margin-top: 5px;
-      resize: none;
-    }
-
-    /* width */
-    ::-webkit-scrollbar {
-      width: 5px;
-      border-radius: 3px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: #e5e6e8;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background: #b7b8ba;
-    }
-
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-      background: #a0a1a2;
-    }
-
-
-    .confirm {
-      margin-top: 10px;
-
-      button {
-        background-color: #363636;
-        color: #ffffff;
-        border: none;
-        padding: 5px;
-        text-transform: uppercase;
-        cursor: pointer;
+      .my-scrollbar {
+        height: calc(100% - 55px);
       }
 
       span {
-        color: #363636;
-        margin-left: 5px;
-        font-size: 12px;
+        display: inline-block;
+        width: 7rem;
+        font-size: 1.1rem;
       }
 
+      input {
+        background-color: #f9f9fa;
+        border: 1px solid #8c8c8c;
+        padding: 0 2px;
+        width: 15rem;
+        font-size: 1.1rem;
+      }
+
+      .field-title {
+        display: inline-block;
+        margin-top: 20px;
+        text-transform: uppercase;
+        font-weight: 500;
+      }
+
+      .fieldGroup {
+        margin: 10px;
+
+        div:nth-child(2) {
+          margin-top: 5px;
+        }
+      }
+
+      textarea {
+        background-color: #f9f9fa;
+        width: 25rem;
+        max-width: 310px;
+        height: 200px;
+        resize: none;
+        margin: 5px 10px 0;
+        padding: 0 5px;
+        font-size: 1.1rem;
+      }
+
+      /* width */
+      ::-webkit-scrollbar {
+        width: 0.5rem;
+        border-radius: 3px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #e5e6e8;
+      }
+
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #b7b8ba;
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a0a1a2;
+      }
+
+
+      .confirm {
+        margin-top: 10px;
+
+        button {
+          background-color: #363636;
+          width: 105px;
+          height: 30px;
+          color: #ffffff;
+          border: none;
+          padding: 5px;
+          margin: 10px;
+          text-transform: uppercase;
+          cursor: pointer;
+          position: relative;
+          line-height: 10px;
+        }
+
+        button::after {
+          content: '';
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          position: absolute;
+          left: 0;
+          top: 0;
+
+        }
+
+        button.highlight::after {
+          content: '';
+          opacity: 1;
+          animation: blink 2.0s linear 2;
+        }
+
+        span {
+          color: #363636;
+          margin-left: 5px;
+          font-size: 0.86rem;
+        }
+
+      }
     }
+  }
+
+
+
+
+
+}
+
+.mobile {
+  .wrapper {
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    margin:0;
+    margin-right: 20px;
+
+    .editing-panel {
+      height: calc(calc(var(--vh, 1vh) * 100) - 4rem);
+      position: relative;
+
+      .confirm {
+        position: absolute;
+        bottom: 0;
+        height: 60px;
+      }
+    }
+
+    h3 {
+      margin-top: 0;
+      height: 4rem;
+    }
+
+
+  }
+  .preview-panel {
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    overflow: auto;
+  }
+}
+
+@media (max-width: 450px) {
+  .container .wrapper {
+    width: 100%;
+    margin: 0;
+
+    h3 {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    .editing-panel {
+      margin-right: 0;
+      width: 100%;
+
+      span {
+        width: 10rem !important;
+      }
+
+      .fieldGroup {
+        width: calc(100% - 10px);
+      }
+    }
+
   }
 }

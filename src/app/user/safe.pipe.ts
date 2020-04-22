@@ -9,12 +9,7 @@ export class SafePipe implements PipeTransform {
   constructor(protected sanitizer: DomSanitizer) {
   }
 
-  prevValue;
-
   public transform(value: any): SafeHtml {
-    if (value !== this.prevValue) {
-      this.prevValue = value;
-      return this.sanitizer.bypassSecurityTrustHtml(value);
-    }
+    return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 }

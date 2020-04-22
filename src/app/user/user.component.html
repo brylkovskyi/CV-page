@@ -1,1 +1,4 @@
-<app-user-container [inputUserData]="userData"></app-user-container>
+<div class="container">
+    <app-desctop-view *ngIf="(displayWidth | async) > 800 " [inputUserData]="userData"></app-desctop-view>
+    <app-mobile-view *ngIf="(displayWidth | async) <= 800" [inputUserData]="userData"></app-mobile-view>
+</div>

@@ -1,4 +1,6 @@
-<div class="container">
+<div class="main">
     <app-spinner></app-spinner>
+    <app-modal-window></app-modal-window>
+    <button *ngIf="homeButtonToggler | async" (click)="navigateHome()" class="home">HOME</button>
     <router-outlet></router-outlet>
 </div>

@@ -6,16 +6,24 @@
   color: #363636;
 }
 
-.preview-panel {
-  div.container {
-    overflow: unset;
-    min-height: unset;
-    min-width: unset;
-
-    .main {
-      margin: 10px;
-    }
-  }
-
+html {
+  font-size: 14px;
 }
+
+app-user, app-admin {
+  width: 100%;
+}
+
+@media (max-width: 380px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 380px) and (max-width: 450px) {
+  html {
+    font-size: 12px;
+  }
+}
+
 

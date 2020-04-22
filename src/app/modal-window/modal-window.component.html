@@ -1,0 +1,11 @@
+<div class="wrapper" [ngClass]="{'show': modalService.modalToggler |async}">
+    <div *ngIf="modalService.modalData" class="container">
+        <h3>
+            {{modalService.modalData.heading}}
+        </h3>
+        <p [innerHTML]="modalService.modalData.message | safe"></p>
+            <a (click)="modalService.modalClose('first')">{{modalService.modalData.btnFirst}}</a><br/>
+            <a (click)="modalService.modalClose('second')">{{modalService.modalData.btnSecond}}</a><br/>
+            <a (click)="modalService.modalClose('third')">{{modalService.modalData.btnThird}}</a><br/>
+    </div>
+</div>
