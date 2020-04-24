@@ -1,0 +1,5 @@
+<div class="button-container">
+    <button *ngIf="homeButtonToggler | async" (click)="navigateHome()" >HOME</button>
+    <button *ngIf="shareButtonToggler | async" (click)="navigateShare()" >SHARE</button>
+    <button *ngIf="editButtonToggler | async" (click)="navigateEdit()" >EDIT</button>
+</div>
