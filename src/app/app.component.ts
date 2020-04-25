@@ -37,6 +37,10 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // set vh for mobile devices
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+
         window.onbeforeunload = () => {
             window.scrollTo(0, 0);
         };
