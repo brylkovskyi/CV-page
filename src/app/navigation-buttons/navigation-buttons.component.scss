@@ -7,7 +7,7 @@
 
   button {
     display: block;
-    width: 4rem;
+    width: 2.5rem;
     font-size: 1rem;
     background-color: #ffffff;
     color: #363636;
@@ -18,7 +18,7 @@
     padding: 0.5rem 0;
     opacity: 0.4;
     transition: opacity 0.3s;
-    box-shadow: 0 2px 5px black;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     margin: 0.6rem;
     text-align: center;
   }
