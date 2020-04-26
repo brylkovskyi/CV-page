@@ -1,9 +1,9 @@
 <div class="container">
     <div *ngIf="user; else notRegistered" class="center-container">
         <div>
-            <h1> You are logged in as <i>{{user.displayName}}</i></h1>
+            <h1> You are logged in as <i>{{userName | async}}</i></h1>
             <span class="authInfo">
-                <img alt="Photo" [src]="user.photoURL">
+                <img alt="Photo" [src]="userPhoto | async">
                 <a (click)="signOut()">SignOut</a>
             </span>
         </div>
@@ -13,7 +13,7 @@
             <span>
                 <a (click)="editProfile()">Edit ></a>
                 <br/>
-                <a (click)="viewProfile()">Share ></a>
+                <a  *ngIf="shareButtonToggler | async" (click)="viewProfile()">Share ></a>
             </span>
         </span>
 
@@ -26,8 +26,13 @@
                         supported</i>
                 </h2>
             </div>
+            <form [formGroup]="credentials" (ngSubmit)="submitCredentials()">
+                <input type="text" formControlName="email">
+                <input type="password" formControlName="password">
+                <button type="submit">submit</button>
+            </form>
             <span class="content">
-                <a (click)="signInOAuth()">Sign In ></a>
+                <a (click)="signInOAuth()">Sign In With Google ></a>
             </span>
         </div>
     </ng-template>

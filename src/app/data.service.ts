@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {map, switchMap} from 'rxjs/operators';
-import {Subject, throwError, of, Observable} from 'rxjs';
+import {distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
+import {Subject, throwError, of, Observable, BehaviorSubject} from 'rxjs';
 import {UserData} from '../assets/user-mock';
 import {User} from './shared/user-interface';
 import {AuthService} from './auth.service';
@@ -13,12 +13,26 @@ export class DataService {
     constructor(private db: AngularFirestore, private authService: AuthService) {
     }
 
+    userData = new BehaviorSubject<User>(null);
     activeField: Subject<string> = new Subject();
 
-    getUserData(userId): Observable<User> {
-        return this.db.doc('users/' + userId).snapshotChanges().pipe(
-            map(snapshot => snapshot.payload.data() as User)
+    checkUserDataExists(userId) {
+        return this.db.doc('users/' + userId).get().pipe(
+            map(data => data.exists)
         );
+    }
+
+    getUserData(userId): Observable<User> {
+        const getData = this.db.doc('users/' + userId).snapshotChanges().pipe(
+            tap(user => this.userData.next(user.payload.data() as User)),
+            map(snapshot => snapshot.payload.data() as User),
+        );
+
+        return this.userData.pipe(
+            distinctUntilChanged(),
+            switchMap(data => (!data || data.id !== userId) ? getData : of(data)),
+        );
+
     }
 
     checkUserRights(userIdFromRoute) {

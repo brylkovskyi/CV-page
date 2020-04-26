@@ -4,35 +4,43 @@ import * as firebase from 'firebase/app';
 import {Subject} from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
-  provider = new firebase.auth.GoogleAuthProvider();
-  authStatus = new Subject <firebase.User | null>();
+    provider = new firebase.auth.GoogleAuthProvider();
+    authStatus = new Subject<firebase.User | null>();
 
-  constructor(private auth: AngularFireAuth, private zone: NgZone) {
-  }
+    constructor(private auth: AngularFireAuth, private zone: NgZone) {
+    }
 
-  authStatusChecker() {
-    this.auth.auth.onAuthStateChanged(
-      user => {
-        this.zone.run(() => this.authStatus.next(user));
-      },
-      err => {
-        this.zone.run(() => {
-          console.log(err);
-          this.authStatus.next(null);
-        });
-      });
-    return this.authStatus;
-  }
+    authStatusChecker() {
+        this.auth.auth.onAuthStateChanged(
+            user => {
+                this.zone.run(() => this.authStatus.next(user));
+            },
+            err => {
+                this.zone.run(() => {
+                    console.log(err);
+                    this.authStatus.next(null);
+                });
+            });
+        return this.authStatus;
+    }
 
-  signIn() {
-    this.auth.auth.signInWithPopup(this.provider);
-  }
+    registerUser(credentials) {
+        return this.auth.auth.createUserWithEmailAndPassword(credentials.value.email, credentials.value.password);
+    }
 
-  signOut() {
-    this.auth.auth.signOut();
-  }
+    signIn(credentials) {
+        return this.auth.auth.signInWithEmailAndPassword(credentials.value.email, credentials.value.password);
+    }
+
+    signInGoogle() {
+        this.auth.auth.signInWithPopup(this.provider);
+    }
+
+    signOut() {
+        this.auth.auth.signOut();
+    }
 }
 
