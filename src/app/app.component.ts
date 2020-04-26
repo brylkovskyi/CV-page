@@ -9,7 +9,6 @@ import {
     NavigationStart,
     Router
 } from '@angular/router';
-import {Subject} from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -19,11 +18,6 @@ import {Subject} from 'rxjs';
 export class AppComponent implements OnInit {
 
     loading = this.loadingService.loadingSetter;
-    homeButtonToggler = new Subject();
-
-    navigateHome() {
-        this.router.navigate(['login']);
-    }
 
     constructor(private loadingService: LoadingService,
                 private router: Router) {
@@ -38,13 +32,15 @@ export class AppComponent implements OnInit {
                 event instanceof NavigationError ||
                 event instanceof GuardsCheckStart) {
                 this.loading(false);
-                const routes = /(view)|(edit)/i;
-                this.homeButtonToggler.next(event.url.match(routes) || event instanceof NavigationCancel);
             }
         });
     }
 
     ngOnInit(): void {
+        // set vh for mobile devices
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+
         window.onbeforeunload = () => {
             window.scrollTo(0, 0);
         };

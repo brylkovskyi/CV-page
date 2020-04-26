@@ -1,7 +1,6 @@
 import {Injectable, NgZone} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
-
 import {Subject} from 'rxjs';
 
 @Injectable({

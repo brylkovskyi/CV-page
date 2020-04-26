@@ -34,22 +34,11 @@ export class MobileViewComponent implements AfterViewChecked {
     private aboutMe(id) {
         if (id === 'link') {
             this.tab.next('aboutme');
-            const elem = this.footerElement.nativeElement;
-            this.stickBottom = elem.offsetTop < window.innerHeight - elem.offsetHeight;
         }
     }
 
     scrollTo(name) {
         this.tab.next(name);
-        if (this.footerElement && this.footerElement.nativeElement) {
-            this.stickBottom = false;
-            this.changeDetector.detectChanges();
-            const elem = this.footerElement.nativeElement;
-            this.stickBottom = elem.offsetTop < window.innerHeight - elem.offsetHeight;
-        }
-        this.changeDetector.detectChanges();
-
-
     }
 
     filterField(data, fieldName): UserDataField {
@@ -59,8 +48,8 @@ export class MobileViewComponent implements AfterViewChecked {
     ngAfterViewChecked() {
         if (this.footerElement && this.footerElement.nativeElement) {
             const elem = this.footerElement.nativeElement;
-            if (this.stickBottom !== elem.offsetTop <= window.innerHeight - elem.offsetHeight) {
-                this.stickBottom = elem.offsetTop <= window.innerHeight - elem.offsetHeight;
+            if (this.stickBottom !== elem.offsetTop <= document.body.scrollHeight - elem.offsetHeight) {
+                this.stickBottom = elem.offsetTop <= document.body.scrollHeight - elem.offsetHeight;
                 this.changeDetector.detectChanges();
             }
         }

@@ -11,6 +11,7 @@ import {UnknownPageComponent} from './unknown-page/unknown-page.component';
 import {SpinnerComponent} from './spinner/spinner.component';
 import { ModalWindowComponent } from './modal-window/modal-window.component';
 import {SharedModule} from './shared/shared.module';
+import { NavigationButtonsComponent } from './navigation-buttons/navigation-buttons.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {SharedModule} from './shared/shared.module';
     LoginComponent,
     UnknownPageComponent,
     SpinnerComponent,
-    ModalWindowComponent
+    ModalWindowComponent,
+    NavigationButtonsComponent
   ],
   imports: [
     BrowserModule,
