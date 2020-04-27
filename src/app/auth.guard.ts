@@ -25,7 +25,6 @@ export class AuthGuard implements CanActivate, CanLoad {
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        this.checkRights(next.params.id).subscribe(console.log);
         return this.checkRights(next.params.id);
     }
 

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import {Subject, throwError, of, Observable, BehaviorSubject} from 'rxjs';
 import {UserData} from '../assets/user-mock';
 import {User} from './shared/user-interface';
@@ -23,14 +23,14 @@ export class DataService {
     }
 
     getUserData(userId): Observable<User> {
-        const getData = this.db.doc('users/' + userId).snapshotChanges().pipe(
-            tap(user => this.userData.next(user.payload.data() as User)),
-            map(snapshot => snapshot.payload.data() as User),
-        );
-
         return this.userData.pipe(
-            distinctUntilChanged(),
-            switchMap(data => (!data || data.id !== userId) ? getData : of(data)),
+            tap(data => {
+                if (!data || data.id !== userId) {
+                    this.db.doc('users/' + userId).snapshotChanges().pipe(
+                        map(snapshot => snapshot.payload.data() as User),
+                    ).subscribe(userData => this.userData.next(userData));
+                }
+            }),
         );
 
     }

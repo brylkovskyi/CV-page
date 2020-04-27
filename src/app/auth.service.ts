@@ -2,6 +2,7 @@ import {Injectable, NgZone} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import {Subject} from 'rxjs';
+import UserCredential = firebase.auth.UserCredential;
 
 @Injectable({
     providedIn: 'root'
@@ -27,11 +28,11 @@ export class AuthService {
         return this.authStatus;
     }
 
-    registerUser(credentials) {
+    registerUser(credentials): Promise<UserCredential> {
         return this.auth.auth.createUserWithEmailAndPassword(credentials.value.email, credentials.value.password);
     }
 
-    signIn(credentials) {
+    signIn(credentials): Promise<UserCredential> {
         return this.auth.auth.signInWithEmailAndPassword(credentials.value.email, credentials.value.password);
     }
 
@@ -43,4 +44,3 @@ export class AuthService {
         this.auth.auth.signOut();
     }
 }
-

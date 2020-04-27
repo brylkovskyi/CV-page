@@ -22,17 +22,18 @@
         <div class="center-container">
             <div>
                 <h2> Hello! Please sign in to view or create your CV form.
-                    <i class="disclaimer"><br/>*Currently only Google Authentication is
-                        supported</i>
+                    <i class="disclaimer"><br/>To register a New user type in your email and password</i>
                 </h2>
             </div>
-            <form [formGroup]="credentials" (ngSubmit)="submitCredentials()">
-                <input type="text" formControlName="email">
-                <input type="password" formControlName="password">
-                <button type="submit">submit</button>
+            <form [formGroup]="credentials">
+                <label for="email">Email</label>
+                <input id="email" type="email" formControlName="email">
+                <label for="password">Password</label>
+                <input id="password" type="password" formControlName="password">
             </form>
             <span class="content">
-                <a (click)="signInOAuth()">Sign In With Google ></a>
+                <a (click)="submitCredentials()">Sign In With Credentials></a><br />
+                <a (click)="signInOAuth()">Sign In With <i class="fab fa-google"></i> Auth > </a>
             </span>
         </div>
     </ng-template>
