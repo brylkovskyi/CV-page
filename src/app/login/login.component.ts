@@ -4,10 +4,9 @@ import {Router} from '@angular/router';
 import * as firebase from 'firebase/app';
 import {LoadingService} from '../loading.service';
 import {DataService} from '../data.service';
-import {FormControl, FormGroup} from '@angular/forms';
-import {catchError, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {BehaviorSubject, from, of, Subject} from 'rxjs';
-import UserCredential = firebase.auth.UserCredential;
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {debounceTime, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {BehaviorSubject, of, Subject} from 'rxjs';
 import {ModalWindowService} from '../modal-window/modal-window.service';
 
 @Component({
@@ -17,12 +16,6 @@ import {ModalWindowService} from '../modal-window/modal-window.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
     loading = this.loadingService.loadingSetter;
-    modalMessage = {
-        heading: 'Would you like to create a new user with this credentials?',
-        message: '',
-        btnFirst: 'Yes >',
-        btnSecond: 'Cancel >'
-    };
 
     constructor(private authService: AuthService,
                 private router: Router,
@@ -32,17 +25,47 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     user: firebase.User | null;
+    formUnsubscribe = new Subject();
     shareButtonToggler = new BehaviorSubject(false);
     userName = new BehaviorSubject('Anonymous');
     userPhoto = new BehaviorSubject('https://avatarfiles.alphacoders.com/956/95609.jpg');
     unsubscribe = new Subject();
+    error = {
+        email: [],
+        password: []
+    };
 
-    credentials = new FormGroup({
-        email: new FormControl(''),
-        password: new FormControl('')
+    loginForm = new FormGroup({
+        email: new FormControl('', Validators.compose([Validators.required, Validators.pattern(/^\S+@\S+\.\S+$/i)])),
+        password: new FormControl('', [Validators.required, Validators.pattern(/^\S{6,}$/i)])
     });
 
-    assignUserInfo(userData) {
+    ngOnInit() {
+        this.loginForm.valueChanges.pipe(
+            debounceTime(700),
+            switchMap(() => of({
+                email: Object.keys(this.loginForm.get('email').errors || {}),
+                password: Object.keys(this.loginForm.get('password').errors || {})
+            })),
+            takeUntil(this.formUnsubscribe))
+            .subscribe(data => this.error = data);
+        this.loading(true);
+        this.authService.authStatusChecker().pipe(
+            tap(user => {
+                this.user = user;
+                if (user) {
+                    this.formUnsubscribe.next(true);
+                }
+            }),
+            switchMap((user) => user ? this.dataService.getUserData(user.uid) : of(null)),
+            takeUntil(this.unsubscribe)
+        ).subscribe(userData => {
+            this.assignUserInfo(userData);
+            this.loading(false);
+        });
+    }
+
+    assignUserInfo(userData): void {
         if (userData) {
             this.userPhoto.next(userData.photoURL);
             this.userName.next(userData.name);
@@ -54,54 +77,42 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
     }
 
-    submitCredentials() {
+    submitCredentials(): void {
         this.loading(true);
-        from(this.authService.signIn(this.credentials)).pipe(
-            catchError(e => {
-                switch (e.code) {
-                    case 'auth/user-not-found':
-                        const password = this.credentials.value.password;
-                        const email = this.credentials.value.email;
-                        this.modalMessage.message = `Email: ${email} , Password: ${password.replace(/.(?=.{3,}$)/g, '*')}`;
-                        return this.modalService.openModal(this.modalMessage).pipe(
-                            switchMap(result => {
-                                if (result === 'first') {
-                                    return this.authService.registerUser(this.credentials);
-                                } else {
-                                    this.loading(false);
-                                    return of(null);
-                                }
-                            })
-                        );
-                    case 'auth/wrong-password':
-                        console.log(e);
-                        this.loading(false);
-                        break;
-                    default:
-                        this.loading(false);
-                        console.log(e);
-                }
-            }),
-            filter(Boolean),
-            takeUntil(this.unsubscribe)
-        ).subscribe(
-            (userCredentials: UserCredential) => {
-                this.user = userCredentials.user;
+        this.authService.signIn(this.loginForm)
+            .then().catch((e) => {
+            switch (e.code) {
+                case 'auth/user-not-found':
+                    const password = this.loginForm.value.password.replace(/.(?=.{3,}$)/g, '*');
+                    const email = this.loginForm.value.email;
+                    const modalMessage = {
+                        heading: 'Would you like to create a new user with this credentials?',
+                        message: `Email: ${email} , Password: ${password}`, btnFirst: 'Yes >', btnSecond: 'Cancel >'
+                    };
+                    this.modalService.openModal(modalMessage).pipe(takeUntil(this.unsubscribe))
+                        .subscribe(result => {
+                            if (result === 'first') {
+                                this.authService.registerUser(this.loginForm)
+                                    .then()
+                                    .catch((error => {
+                                        console.log(error);
+                                        this.error.email = ['unspecified'];
+                                        this.loading(false);
+                                    }));
+                            } else {
+                                this.loading(false);
+                            }
+                        });
+                    break;
+                case 'auth/wrong-password':
+                    this.error.password = ['wrong'];
+                    this.loading(false);
+                    break;
+                default:
+                    this.error.email = ['unspecified'];
+                    console.log(e);
+                    this.loading(false);
             }
-        );
-    }
-
-    ngOnInit() {
-        this.loading(true);
-        this.authService.authStatusChecker().pipe(
-            tap(user => {
-                this.user = user;
-            }),
-            switchMap((user) => user ? this.dataService.getUserData(user.uid) : of(null)),
-            takeUntil(this.unsubscribe)
-        ).subscribe(userData => {
-            this.assignUserInfo(userData);
-            this.loading(false);
         });
     }
 

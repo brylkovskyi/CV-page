@@ -21,7 +21,7 @@
       cursor: pointer;
     }
 
-    div {
+    div.header {
       width: 100%;
       background-color: #363636;
       text-align: center;
@@ -105,27 +105,53 @@
       flex-flow: column;
       padding: 15px 15px 0 15px;
       justify-content: flex-start;
+
       * {
         font-weight: 500;
       }
+
+      div {
+        position: relative;
+      }
+
       input {
-        width: 60%;
+        width: 70%;
         font-size: 1.2rem;
+        line-height: 1.5rem;
         border: unset;
         border-bottom: 1px solid #787878;
         transition: border-bottom-color 0.2s ease-in;
+        color: #787878;
       }
+
       input:focus {
         outline: none;
         border-bottom: 1px solid #9b9b9b;
       }
+
       label {
         color: #787878;
         font-size: 1rem;
       }
-      label[for="password"] {
-        margin-top: 0.7rem;
+
+      input[type="email"] {
+        margin-bottom: 0.7rem;
       }
+
+      p {
+        font-size: 1rem;
+        display: inline;
+        font-style: italic;
+
+        span.unspecified-error {
+          position: absolute;
+          display: block;
+          font-size: 0.9rem;
+          top: -5px;
+          right: -5px;
+        }
+      }
+
 
     }
 
@@ -144,6 +170,7 @@
         font-weight: 500;
         margin: 10px 0;
         text-align: center;
+
         i {
           color: #787878;
         }
@@ -153,12 +180,23 @@
         i {
           color: #9b9b9b;
         }
+
         color: #9b9b9b;
       }
+
+      a.disabled {
+        color: #e4e4e4;
+        cursor: default;
+      }
     }
+
+
   }
 }
 
-@media (max-width: 400px) {
-
+@media (max-width: 450px) {
+  input {
+    min-width: unset !important;
+    width: 100% !important;
+  }
 }

@@ -1,6 +1,6 @@
 <div class="container">
     <div *ngIf="user; else notRegistered" class="center-container">
-        <div>
+        <div class="header">
             <h1> You are logged in as <i>{{userName | async}}</i></h1>
             <span class="authInfo">
                 <img alt="Photo" [src]="userPhoto | async">
@@ -13,26 +13,40 @@
             <span>
                 <a (click)="editProfile()">Edit ></a>
                 <br/>
-                <a  *ngIf="shareButtonToggler | async" (click)="viewProfile()">Share ></a>
+                <a *ngIf="shareButtonToggler | async" (click)="viewProfile()">Share ></a>
             </span>
         </span>
-
     </div>
     <ng-template #notRegistered>
         <div class="center-container">
-            <div>
+            <div class="header">
                 <h2> Hello! Please sign in to view or create your CV form.
                     <i class="disclaimer"><br/>To register a New user type in your email and password</i>
                 </h2>
             </div>
-            <form [formGroup]="credentials">
-                <label for="email">Email</label>
+            <form [formGroup]="loginForm">
+                <div>
+                    <label for="email">Email</label>
+                    <p [ngSwitch]="error.email">
+                        <span *ngSwitchCase="'pattern'"> is not valid</span>
+                        <span *ngSwitchCase="'required'"> is required</span>
+                        <span *ngSwitchCase="'unspecified'" class="unspecified-error">Request error (more in console)</span>
+                    </p>
+                </div>
                 <input id="email" type="email" formControlName="email">
-                <label for="password">Password</label>
+                <div>
+                    <label for="password">Password</label>
+                    <p [ngSwitch]="error.password" class="error-message">
+                        <span *ngSwitchCase="'pattern'"> should have 6 characters, no spaces</span>
+                        <span *ngSwitchCase="'required'"> is required</span>
+                        <span *ngSwitchCase="'wrong'"> is wrong</span>
+                    </p>
+                </div>
                 <input id="password" type="password" formControlName="password">
             </form>
+
             <span class="content">
-                <a (click)="submitCredentials()">Sign In With Credentials></a><br />
+                <a (click)="loginForm.valid ? submitCredentials(): null" [ngClass]="{'disabled': !loginForm.valid}">Sign In With Credentials></a><br/>
                 <a (click)="signInOAuth()">Sign In With <i class="fab fa-google"></i> Auth > </a>
             </span>
         </div>
