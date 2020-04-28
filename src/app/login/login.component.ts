@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             takeUntil(this.formUnsubscribe))
             .subscribe(data => this.error = data);
         this.loading(true);
+
         this.authService.authStatusChecker().pipe(
             tap(user => {
                 this.user = user;

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {map, switchMap, tap} from 'rxjs/operators';
+import {distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
 import {Subject, throwError, of, Observable, BehaviorSubject} from 'rxjs';
 import {UserData} from '../assets/user-mock';
 import {User} from './shared/user-interface';
@@ -16,21 +16,19 @@ export class DataService {
     userData = new BehaviorSubject<User>(null);
     activeField: Subject<string> = new Subject();
 
-    checkUserDataExists(userId) {
-        return this.db.doc('users/' + userId).get().pipe(
-            map(data => data.exists)
-        );
-    }
-
     getUserData(userId): Observable<User> {
         return this.userData.pipe(
+            distinctUntilChanged(),
             tap(data => {
                 if (!data || data.id !== userId) {
                     this.db.doc('users/' + userId).snapshotChanges().pipe(
                         map(snapshot => snapshot.payload.data() as User),
-                    ).subscribe(userData => this.userData.next(userData));
+                    ).subscribe(userData => {
+                        this.userData.next(userData);
+                    });
                 }
             }),
+            tap(console.log)
         );
 
     }
