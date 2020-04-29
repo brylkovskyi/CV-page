@@ -17,7 +17,7 @@
                 </div>
                 <div *ngFor="let userField of userData.data; index as i">
                     <span class="field-title">{{userField.groupName | titlecase}}</span>
-                    <div *ngIf="userField.groupData[0].title">
+                    <div *ngIf="isArray(userField.groupData)">
                         <div *ngFor="let row of userField.groupData; index as y">
                             <div (mouseover)="setActiveField($event)" (mouseleave)="removeActiveField()"
                                  class="fieldGroup active-{{userData.data[i].groupData[y].title}}"
@@ -49,10 +49,10 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="!userField.groupData[0].title">
-                    <textarea [name]="userField.groupName"
-                              (change)="setFieldData($event.target, i)">{{userData.data[i].groupData}}
-                    </textarea>
+                    <div *ngIf="!(isArray(userField.groupData))">
+                        <textarea [name]="userField.groupName"
+                                  (change)="setFieldData($event.target, i)">{{userData.data[i].groupData}}
+                        </textarea>
                     </div>
                 </div>
             </ng-scrollbar>

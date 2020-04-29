@@ -26,6 +26,8 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, A
     }
 
     @ViewChild('saveButton', {static: false}) saveButtonRef: ElementRef;
+    @ViewChild('input', {static: false}) input: ElementRef;
+    @ViewChild('textarea', {static: false}) textarea: ElementRef;
     loading = this.loadingService.loadingSetter;
     userId;
     userData;
@@ -109,6 +111,10 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, A
         );
     }
 
+    isArray(data) {
+        return Array.isArray(data);
+    }
+
     saveEditedData() {
         this.dataService.updateUser(this.userId, this.userData).then(
             () => {
@@ -128,7 +134,7 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, A
         this.route.paramMap.pipe(
             tap((routeData: ParamMap) => this.userId = routeData.get('id')),
             switchMap(() => this.dataService.getUserData(this.userId)),
-            switchMap(user => user ? of(user) : this.dataService.createUser(this.userId)),
+            switchMap(user => user === undefined ? this.dataService.createUser(this.userId) :  of(user)),
             tap(data => {
                 this.userData = data;
                 this.initUserData = JSON.stringify(data);
