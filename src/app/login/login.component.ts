@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                         .subscribe(result => {
                             if (result === 'first') {
                                 this.authService.registerUser(this.loginForm)
-                                    .then()
+                                    .then(console.log)
                                     .catch((error => {
                                         console.log(error);
                                         this.error.email = ['unspecified'];

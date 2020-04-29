@@ -34,7 +34,7 @@ export class UserComponent extends DisplayWidth implements OnInit, OnDestroy {
             takeUntil(this.unsubscribe)
         )
             .subscribe((serverUserData: User) => {
-                    serverUserData === undefined ? this.router.navigate(['/404']) : this.userData = serverUserData;
+                    serverUserData ? this.userData = serverUserData : this.router.navigate(['/404']);
                     this.loading(false);
                 }
             );

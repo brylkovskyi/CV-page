@@ -66,7 +66,7 @@
     <div *ngIf="(displayWidth | async) > 1200" class="preview-panel">
         <app-desctop-view [inputUserData]="userData"></app-desctop-view>
     </div>
-    <div *ngIf="1200 >= (displayWidth | async) && (displayWidth | async) >= 800" class="preview-panel">
+    <div *ngIf="1200 >= (displayWidth | async) && (displayWidth | async) >= 900" class="preview-panel">
         <app-mobile-view [inputUserData]="userData"></app-mobile-view>
     </div>
 </div>
