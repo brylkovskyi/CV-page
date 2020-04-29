@@ -1,6 +1,4 @@
 import {
-    AfterViewChecked,
-    ChangeDetectorRef,
     Component,
     ElementRef,
     HostListener,
@@ -16,13 +14,12 @@ import {BehaviorSubject} from 'rxjs';
     templateUrl: './mobile-view.component.html',
     styleUrls: ['./mobile-view.component.scss']
 })
-export class MobileViewComponent implements AfterViewChecked {
+export class MobileViewComponent {
     tab = new BehaviorSubject('welcome');
     stickBottom;
     socialRecognizer = socialRecognizer;
 
-    constructor(private changeDetector: ChangeDetectorRef) {
-
+    constructor() {
     }
 
     @Input() inputUserData: User;
@@ -45,15 +42,5 @@ export class MobileViewComponent implements AfterViewChecked {
         return data.find(item => item.groupName === fieldName);
     }
 
-    ngAfterViewChecked() {
-        if (this.footerElement && this.footerElement.nativeElement) {
-            const elem = this.footerElement.nativeElement;
-            if (this.stickBottom !== elem.offsetTop <= document.body.scrollHeight - elem.offsetHeight) {
-                this.stickBottom = elem.offsetTop <= document.body.scrollHeight - elem.offsetHeight;
-                this.changeDetector.detectChanges();
-            }
-        }
-
-    }
 
 }

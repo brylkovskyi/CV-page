@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 email: Object.keys(this.loginForm.get('email').errors || {}),
                 password: Object.keys(this.loginForm.get('password').errors || {})
             })),
-            takeUntil(this.formUnsubscribe))
+            takeUntil(this.unsubscribe))
             .subscribe(data => this.error = data);
         this.loading(true);
 

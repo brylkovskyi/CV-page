@@ -8,6 +8,7 @@
   flex-flow: column;
   align-items: center;
   min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   background-color: #fff;
   position: relative;
 
@@ -72,10 +73,12 @@
     width: 100%;
 
     .welcome {
+      padding-bottom: 4.2rem;
     }
 
     .aboutme {
 
+      padding-bottom: 4.2rem;
       p:nth-child(even) {
         width: 100%;
         border-bottom: 1px solid #b0b0b0;
@@ -86,6 +89,8 @@
     }
 
     .personal {
+
+      padding-bottom: 5rem;
       padding-right: 1rem;
       display: flex;
       flex-flow: column;
