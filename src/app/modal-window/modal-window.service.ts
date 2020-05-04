@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ModalData} from '../shared/modal-window-interface';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {LoadingService} from '../loading.service';
 
 @Injectable({
         providedIn: 'root'

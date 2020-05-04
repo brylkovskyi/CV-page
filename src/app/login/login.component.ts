@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase/app';
-import {LoadingService} from '../loading.service';
+import {LoadingService} from '../spinner/loading.service';
 import {DataService} from '../data.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {debounceTime, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     ngOnInit() {
+        this.loading(true);
         this.loginForm.valueChanges.pipe(
             debounceTime(700),
             switchMap(() => of({
@@ -49,7 +50,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             })),
             takeUntil(this.unsubscribe))
             .subscribe(data => this.error = data);
-        this.loading(true);
 
         this.authService.authStatusChecker().pipe(
             tap(user => {
@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                         .subscribe(result => {
                             if (result === 'first') {
                                 this.authService.registerUser(this.loginForm)
-                                    .then(console.log)
+                                    .then()
                                     .catch((error => {
                                         console.log(error);
                                         this.error.email = ['unspecified'];

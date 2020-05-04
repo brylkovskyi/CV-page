@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {LoadingService} from '../loading.service';
+import {LoadingService} from './loading.service';
+import {ModalWindowService} from '../modal-window/modal-window.service';
 
 @Component({
     selector: 'app-spinner',
@@ -8,7 +9,7 @@ import {LoadingService} from '../loading.service';
 })
 export class SpinnerComponent implements OnInit {
 
-    constructor(private loadingService: LoadingService) {
+    constructor(private loadingService: LoadingService, public modalService: ModalWindowService) {
     }
 
     loading = this.loadingService.loading;

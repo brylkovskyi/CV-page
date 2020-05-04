@@ -3,7 +3,7 @@ import {DataService} from '../data.service';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {LoadingService} from '../loading.service';
+import {LoadingService} from '../spinner/loading.service';
 import {User} from '../shared/user-interface';
 import {DisplayWidth} from '../shared/display.class';
 

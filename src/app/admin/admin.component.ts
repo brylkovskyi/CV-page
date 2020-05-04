@@ -3,7 +3,7 @@ import {DataService} from '../data.service';
 import {delay, mapTo, switchMap, takeUntil, tap, map} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {fromEvent, merge, of, Subject} from 'rxjs';
-import {LoadingService} from '../loading.service';
+import {LoadingService} from '../spinner/loading.service';
 import {ModalWindowService} from '../modal-window/modal-window.service';
 import {ModalData} from '../shared/modal-window-interface';
 import {DisplayWidth} from '../shared/display.class';

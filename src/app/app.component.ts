@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {LoadingService} from './loading.service';
+import {LoadingService} from './spinner/loading.service';
 import {
     GuardsCheckEnd,
     GuardsCheckStart,
