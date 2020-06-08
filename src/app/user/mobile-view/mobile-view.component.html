@@ -50,7 +50,7 @@
             </div>
     </main>
 
-    <footer #footer [ngClass]="{'stick-bottom': stickBottom}">
+    <footer #footer class="stick-bottom" [ngClass]="{'stick-bottom1': stickBottom}">
         <span *ngFor="let entry of filterField(inputUserData.data, 'social').groupData">
         <a [href]=entry.link target="_blank"><i class="fab" [className]=socialRecognizer(entry.link)></i> {{entry.title}}</a>
       </span>

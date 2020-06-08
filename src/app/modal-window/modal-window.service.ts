@@ -15,7 +15,7 @@ export class ModalWindowService {
     constructor() {
     }
 
-    openModal(data) {
+    openModal(data: ModalData) {
         this.modalData = data;
         this.modalToggler.next(true);
         return this.closeResult;

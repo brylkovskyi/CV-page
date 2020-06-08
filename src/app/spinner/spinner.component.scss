@@ -13,7 +13,7 @@
 
   img {
     width: 30px;
-    filter: grayscale(100%);
+    filter: invert(1) opacity(0.5) contrast(200%);
     z-index: 11;
   }
 }

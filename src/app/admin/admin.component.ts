@@ -3,10 +3,11 @@ import {DataService} from '../data.service';
 import {delay, mapTo, switchMap, takeUntil, tap, map} from 'rxjs/operators';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {fromEvent, merge, of, Subject} from 'rxjs';
-import {LoadingService} from '../loading.service';
+import {LoadingService} from '../spinner/loading.service';
 import {ModalWindowService} from '../modal-window/modal-window.service';
 import {ModalData} from '../shared/modal-window-interface';
 import {DisplayWidth} from '../shared/display.class';
+import {User} from '../shared/user-interface';
 
 @Component({
     selector: 'app-admin',
@@ -26,9 +27,11 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, A
     }
 
     @ViewChild('saveButton', {static: false}) saveButtonRef: ElementRef;
+    @ViewChild('input', {static: false}) input: ElementRef;
+    @ViewChild('textarea', {static: false}) textarea: ElementRef;
     loading = this.loadingService.loadingSetter;
     userId;
-    userData;
+    userData: User;
     modifiedUserData: string;
     initUserData: string;
     unsubscribe = new Subject();
@@ -65,6 +68,7 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, A
                             this.saveEditedData();
                             return true;
                         case 'third':
+                            this.dataService.userData.next(JSON.parse(this.initUserData));
                             return true;
                         default:
                             return true;
@@ -109,6 +113,10 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, A
         );
     }
 
+    isArray(data) {
+        return Array.isArray(data);
+    }
+
     saveEditedData() {
         this.dataService.updateUser(this.userId, this.userData).then(
             () => {
@@ -124,11 +132,10 @@ export class AdminComponent extends DisplayWidth implements OnInit, OnDestroy, A
     }
 
     ngOnInit(): void {
-        this.loading(true);
         this.route.paramMap.pipe(
             tap((routeData: ParamMap) => this.userId = routeData.get('id')),
             switchMap(() => this.dataService.getUserData(this.userId)),
-            switchMap(user => user ? of(user) : this.dataService.createUser(this.userId)),
+            switchMap(user => user  ? of(user) : this.dataService.createUser(this.userId)),
             tap(data => {
                 this.userData = data;
                 this.initUserData = JSON.stringify(data);

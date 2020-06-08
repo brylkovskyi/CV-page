@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {map, switchMap} from 'rxjs/operators';
-import {Subject, throwError, of, Observable} from 'rxjs';
+import {distinctUntilChanged, filter, map, switchMap, tap} from 'rxjs/operators';
+import {Subject, throwError, of, Observable, BehaviorSubject} from 'rxjs';
 import {UserData} from '../assets/user-mock';
 import {User} from './shared/user-interface';
 import {AuthService} from './auth.service';
@@ -13,11 +13,22 @@ export class DataService {
     constructor(private db: AngularFirestore, private authService: AuthService) {
     }
 
+    userData = new BehaviorSubject<User>(null);
     activeField: Subject<string> = new Subject();
 
-    getUserData(userId): Observable<User> {
-        return this.db.doc('users/' + userId).snapshotChanges().pipe(
-            map(snapshot => snapshot.payload.data() as User)
+    getUserData(userId): Observable<User | undefined > {
+        return this.userData.pipe(
+            distinctUntilChanged(),
+            tap(data => {
+                if (!data || data.id !== userId) {
+                    this.db.doc('users/' + userId).snapshotChanges().pipe(
+                        map(snapshot => snapshot.payload.data() as User),
+                    ).subscribe(userData => {
+                        this.userData.next(userData);
+                    });
+                }
+            }),
+            filter(val => val !== null)
         );
     }
 
@@ -43,7 +54,7 @@ export class DataService {
     }
 
     deleteUser(userId: string) {
-        this.db.doc('users/' + userId).delete();
+        return this.db.doc('users/' + userId).delete();
     }
 
 }
