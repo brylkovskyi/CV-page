@@ -30,6 +30,7 @@ describe('DataService', () => {
     });
 
     it('all CRUD operations to work properly', (done) => {
+        // signIn to have ability to work with database
         authService.signIn({value: {email: 'mail@email.com', password: 'abc12345'}}).then(user => {
             expect(user.user.hasOwnProperty('uid')).toBe(true);
             uid = user.user.uid;
