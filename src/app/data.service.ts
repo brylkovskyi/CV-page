@@ -30,7 +30,6 @@ export class DataService {
             }),
             filter(val => val !== null)
         );
-
     }
 
     checkUserRights(userIdFromRoute) {
@@ -55,7 +54,7 @@ export class DataService {
     }
 
     deleteUser(userId: string) {
-        this.db.doc('users/' + userId).delete();
+        return this.db.doc('users/' + userId).delete();
     }
 
 }

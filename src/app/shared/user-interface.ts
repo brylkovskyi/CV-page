@@ -4,10 +4,10 @@ export interface UserDataField {
 }
 
 export interface User {
-  data: [UserDataField];
+  data: UserDataField[];
   name: string;
   photoURL: string;
   profession: string;
-  id;
+  id: string;
 }
 
