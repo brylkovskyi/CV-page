@@ -1,15 +1,10 @@
 import {NgModule} from '@angular/core';
 import {SafePipe} from './safe.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [SafePipe],
-    imports: [],
+    imports: [HttpClientModule],
     exports: [SafePipe]
 })
-export class SharedModule {
-    static forRoot() {
-        return {
-            ngModule: SharedModule
-        };
-    }
-}
+export class SharedModule {}
