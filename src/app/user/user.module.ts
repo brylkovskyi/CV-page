@@ -13,7 +13,6 @@ import {DesctopViewComponent} from './desctop-view/desctop-view.component';
 import {SocialTableComponent} from './desctop-view/social-table/social-table.component';
 import {SharedModule} from '../shared/shared.module';
 import { MobileViewComponent } from './mobile-view/mobile-view.component';
-import { MailService } from '../mail.service';
 
 @NgModule({
     declarations: [
@@ -26,7 +25,7 @@ import { MailService } from '../mail.service';
         SocialTableComponent,
         MobileViewComponent
     ],
-    providers: [MailService],
+    providers: [],
     imports: [
         NgScrollbarModule,
         CommonModule,

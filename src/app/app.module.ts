@@ -11,7 +11,6 @@ import {SpinnerComponent} from './spinner/spinner.component';
 import { ModalWindowComponent } from './modal-window/modal-window.component';
 import {SharedModule} from './shared/shared.module';
 import { NavigationButtonsComponent } from './navigation-buttons/navigation-buttons.component';
-import { AngularFireFunctionsModule } from '@angular/fire/functions';
 
 @NgModule({
   declarations: [
@@ -25,10 +24,9 @@ import { AngularFireFunctionsModule } from '@angular/fire/functions';
     BrowserModule,
     AppRoutingModule,
     AngularFireAuthModule,
-    SharedModule,
+    SharedModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule,
-    AngularFireFunctionsModule
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
